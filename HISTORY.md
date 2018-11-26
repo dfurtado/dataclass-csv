@@ -11,3 +11,9 @@
 ### 0.1.2 (2018-11-25)
 
 * Documentation fixes.
+
+
+### 0.1.3 (2018-11-26)
+
+* Bug fixes
+* Removed the requirement of setting the dataclass init to `True`
