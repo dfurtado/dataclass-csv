@@ -77,7 +77,8 @@ class DataclassReader:
                 return value
 
     def _process_row(self, row):
-        cls_instance = self.cls()
+
+        values = []
 
         for field in dataclasses.fields(self.cls):
 
@@ -93,9 +94,9 @@ class DataclassReader:
                     )
                 )
             else:
-                setattr(cls_instance, field.name, transformed_value)
+                values.append(transformed_value)
 
-        return cls_instance
+        return self.cls(*values)
 
     def __next__(self):
         row = next(self.reader)
