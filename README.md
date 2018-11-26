@@ -50,7 +50,7 @@ with open(filename) as users_csv:
 The `DataclassReader` internally uses the `DictReader` from the `csv` module to read the CSV file which means that you can pass the same arguments that you would pass to the `DictReader`. The complete argument list is shown below:
 
 ```python
-dataclass_csv.DataclassReader(f, cls_mapper, fieldnames=None, restkey=None, restval=None, dialect='excel', *args, **kwds)
+dataclass_csv.DataclassReader(f, cls, fieldnames=None, restkey=None, restval=None, dialect='excel', *args, **kwds)
 ```
 
 If you run this code you should see an output like this:
@@ -93,7 +93,7 @@ class User():
 And we modify the CSV file and remove the email for the user Astor:
 
 ```python
-Astor,Furtado,, 7
+Astor,, 7
 ```
 
 If we run the code we should see the output below:
