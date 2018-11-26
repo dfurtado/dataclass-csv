@@ -9,7 +9,7 @@ class DataclassReader:
     def __init__(
         self,
         f,
-        cls_mapper,
+        cls,
         fieldnames=None,
         restkey=None,
         restval=None,
@@ -21,10 +21,10 @@ class DataclassReader:
         if not f:
             raise ValueError('The f argument is required')
 
-        if cls_mapper is None or not dataclasses.is_dataclass(cls_mapper):
-            raise ValueError('cls_mapper argument needs to be a dataclass')
+        if cls is None or not dataclasses.is_dataclass(cls):
+            raise ValueError('cls argument needs to be a dataclass')
 
-        self.cls_mapper = cls_mapper
+        self.cls = cls
         self.optional_fields = self._get_optional_fields()
         self.field_mapping = {}
 
@@ -41,7 +41,7 @@ class DataclassReader:
     def _get_optional_fields(self):
         return [
             field.name
-            for field in dataclasses.fields(self.cls_mapper)
+            for field in dataclasses.fields(self.cls)
             if not isinstance(field.default, dataclasses._MISSING_TYPE)
         ]
 
@@ -77,9 +77,10 @@ class DataclassReader:
                 return value
 
     def _process_row(self, row):
-        mapped_user = self.cls_mapper()
 
-        for field in dataclasses.fields(self.cls_mapper):
+        values = []
+
+        for field in dataclasses.fields(self.cls):
 
             value = self._get_value(row, field)
 
@@ -93,9 +94,9 @@ class DataclassReader:
                     )
                 )
             else:
-                setattr(mapped_user, field.name, transformed_value)
+                values.append(transformed_value)
 
-        return mapped_user
+        return self.cls(*values)
 
     def __next__(self):
         row = next(self.reader)
