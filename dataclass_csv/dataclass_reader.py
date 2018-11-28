@@ -1,8 +1,10 @@
 import dataclasses
 
+from datetime import datetime
 from csv import DictReader
 
 from .field_mapper import FieldMapper
+from .exceptions import MissingDecoratorError
 
 
 class DataclassReader:
@@ -76,16 +78,36 @@ class DataclassReader:
             else:
                 return value
 
+    def parse_date_value(self, field, date_value):
+        if not hasattr(self.cls, '__date_format__'):
+            raise MissingDecoratorError(
+                (
+                    'It was not possible to parse the value of the property '
+                    f'`{field.name}` of type {field.type}. Make sure to use '
+                    'the `@dateformat` decorator specifying the date format.'
+                )
+            )
+
+        return datetime.strptime(date_value, self.cls.__date_format__)
+
     def _process_row(self, row):
 
         values = []
 
         for field in dataclasses.fields(self.cls):
-
             value = self._get_value(row, field)
 
+            if field.type is datetime:
+                try:
+                    transformed_value = self.parse_date_value(field, value)
+                except ValueError:
+                    raise
+                else:
+                    values.append(transformed_value)
+                    continue
+
             try:
-                transformed_value = field.type(value)
+               transformed_value = field.type(value)
             except ValueError:
                 raise ValueError(
                     (

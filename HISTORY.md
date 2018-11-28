@@ -11,3 +11,11 @@
 ### 0.1.2 (2018-11-25)
 
 * Documentation fixes.
+
+### 0.1.3 (2018-11-25)
+
+* Documentation fixes.
+
+### 0.1.4 (2018-11-29)
+
+* Support for parsing datetime values.
