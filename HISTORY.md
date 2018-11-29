@@ -12,10 +12,12 @@
 
 * Documentation fixes.
 
-### 0.1.3 (2018-11-25)
+### 0.1.3 (2018-11-26)
 
-* Documentation fixes.
+* Bug fixes
+* Removed the requirement of setting the dataclass init to `True`
 
 ### 0.1.4 (2018-11-29)
 
 * Support for parsing datetime values.
+

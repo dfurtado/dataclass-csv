@@ -29,14 +29,13 @@ Ella,ella@test.com, 2
 
 Let's create a dataclass that will represent a row in the CSV file above:
 ```python
-@dataclass(init=False)
 class User():
     firstname: str
     email: str
     age: int
 ```
 
-The dataclass `User` has 3 properties, `firstname` and `email` is of type `str` and `age` is of type `int`. Note that it is required to add the `init=False` to the dataclass decorator.
+The dataclass `User` has 3 properties, `firstname` and `email` is of type `str` and `age` is of type `int`.
 
 To load and read the contents of the CSV file we do the same thing as if we would be using the `DictReader` from the `csv` module in the Python's standard library. After opening the file we create an instance of the `DataclassReader` passing two arguments. The first is the `file` and the second is the dataclass that we wish to use to represent the data of every row of the CSV file. Like so:
 
@@ -83,7 +82,6 @@ ValueError: The field age is of type <class 'int'> but received a value of type 
 The `DataclassReader` also handles properties with default values. Let's modify the dataclass `User` and add a default value for the field `email`:
 
 ```python
-@dataclass(init=False)
 class User():
     firstname: str
     email: str = 'Not specified'
