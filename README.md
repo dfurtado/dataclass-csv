@@ -125,6 +125,46 @@ reader.map('First name').to('firstname')
 
 Now the DataclassReader will know how to extract the data from the column **First Name** and add it to the to dataclass property **firstname**
 
+## Supported type annotation
+
+At the moment the `DataclassReader` support `int`, `str`, `float`, `complex` and `datetime`. When defining a `datetime` property, it is necessary to use the `dateformat` decorator, for example:
+
+```python
+from dataclasses import dataclass
+from datetime import datetime
+
+from dataclass_csv import DataclassReader, dateformat
+
+
+@dataclass
+@dateformat('%Y/%m/%d')
+class User:
+    name: str
+    email: str
+    birthday: datetime
+
+
+if __name__ == '__main__':
+
+    with open('users.csv') as f:
+        reader = DataclassReader(f, User)
+        for row in reader:
+            print(row)
+```
+
+Assuming that the CSV file have the following contents:
+
+```text
+name,email,birthday
+Edit,edit@test.com,2018/11/23
+```
+
+The output would look like this:
+
+```text
+User(name='Edit', email='edit@test.com', birthday=datetime.datetime(2018, 11, 23, 0, 0))
+```
+
 ## Copyright and License
 
 Copyright (c) 2018 Daniel Furtado. Code released under BSD 3-clause license

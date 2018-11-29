@@ -1,0 +1,2 @@
+class MissingDecoratorError(Exception):
+    pass
