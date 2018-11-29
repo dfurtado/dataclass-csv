@@ -20,4 +20,4 @@
 ### 0.1.4 (2018-11-29)
 
 * Support for parsing datetime values.
-
+* Better handling when default values are set to `None`
