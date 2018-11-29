@@ -31,13 +31,7 @@ class DataclassReader:
         self.field_mapping = {}
 
         self.reader = DictReader(
-            f,
-            fieldnames,
-            restkey,
-            restval,
-            dialect,
-            *args,
-            **kwds,
+            f, fieldnames, restkey, restval, dialect, *args, **kwds
         )
 
     def _get_optional_fields(self):
@@ -97,6 +91,10 @@ class DataclassReader:
         for field in dataclasses.fields(self.cls):
             value = self._get_value(row, field)
 
+            if (not value and field.default is None):
+                values.append(None)
+                continue
+
             if field.type is datetime:
                 try:
                     transformed_value = self.parse_date_value(field, value)
@@ -107,7 +105,7 @@ class DataclassReader:
                     continue
 
             try:
-               transformed_value = field.type(value)
+                transformed_value = field.type(value)
             except ValueError:
                 raise ValueError(
                     (
