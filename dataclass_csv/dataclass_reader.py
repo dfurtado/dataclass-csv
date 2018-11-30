@@ -4,7 +4,6 @@ from datetime import datetime
 from csv import DictReader
 
 from .field_mapper import FieldMapper
-from .exceptions import MissingDecoratorError
 
 
 class DataclassReader:
@@ -17,7 +16,7 @@ class DataclassReader:
         restval=None,
         dialect='excel',
         *args,
-        **kwds
+        **kwds,
     ):
 
         if not f:
@@ -44,6 +43,10 @@ class DataclassReader:
     def _add_to_mapping(self, property_name, csv_fieldname):
         self.field_mapping[property_name] = csv_fieldname
 
+    def _get_metadata_option(self, field, key):
+        option = field.metadata.get(key, getattr(self.cls, f'__{key}__', None))
+        return option
+
     def _get_value(self, row, field):
         try:
             key = (
@@ -57,7 +60,7 @@ class DataclassReader:
                 return field.default
             else:
                 raise KeyError(
-                    f'The value {field.name} is missing in the CSV file.'
+                    f'The value `{field.name}` is missing in the CSV file.'
                 )
         else:
             if not value and field.name in self.optional_fields:
@@ -65,27 +68,49 @@ class DataclassReader:
             elif not value and field.name not in self.optional_fields:
                 raise ValueError(
                     (
-                        f'The field {field.name} is required. Verify if any '
+                        f'The field `{field.name}` is required. Verify if any '
                         'row in the CSV file is missing this data.'
+                    )
+                )
+            elif (
+                value
+                and field.type is str
+                and not len(value.strip())
+                and not self._get_metadata_option(field, 'accept_whitespaces')
+            ):
+                raise ValueError(
+                    (
+                        f'It seems like the value of `{field.name}` contains '
+                        'only white spaces. To allow white spaces to all '
+                        'string fields, use the @accept_whitespaces decorator. '
+                        'To allow white spaces specifically for the field '
+                        f'`{field.name}` change its definition to: '
+                        f'`{field.name}: str = field(metadata='
+                        '{\'accept_whitespaces\': True})`'
                     )
                 )
             else:
                 return value
 
     def parse_date_value(self, field, date_value):
-        if not hasattr(self.cls, '__date_format__'):
-            raise MissingDecoratorError(
+        dateformat = self._get_metadata_option(field, 'dateformat')
+
+        if not dateformat:
+            raise ValueError(
                 (
-                    'It was not possible to parse the value of the property '
-                    f'`{field.name}` of type {field.type}. Make sure to use '
-                    'the `@dateformat` decorator specifying the date format.'
+                    'Unable to parse the datetime string value. Date format '
+                    'not specified. To specify a date format for all '
+                    'datetime fields in the class, use the @dateformat '
+                    'decorator. To define a date format specifically for this '
+                    'field, change its definition to: '
+                    f'`{field.name}: datetime = field(metadata='
+                    '{\'dateformat\': <date_format>})`'
                 )
             )
 
-        return datetime.strptime(date_value, self.cls.__date_format__)
+        return datetime.strptime(date_value, dateformat)
 
     def _process_row(self, row):
-
         values = []
 
         for field in dataclasses.fields(self.cls):
@@ -109,7 +134,7 @@ class DataclassReader:
             except ValueError:
                 raise ValueError(
                     (
-                        f'The field {field.name} is defined as {field.type} '
+                        f'The field `{field.name}` is defined as {field.type} '
                         f'but received a value of type {type(value)}.'
                     )
                 )

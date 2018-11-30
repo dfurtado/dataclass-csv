@@ -1,2 +1,2 @@
 from .dataclass_reader import DataclassReader
-from .decorators import dateformat
+from .decorators import dateformat, accept_whitespaces
