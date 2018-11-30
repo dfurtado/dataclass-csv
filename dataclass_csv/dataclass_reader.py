@@ -92,7 +92,7 @@ class DataclassReader:
             else:
                 return value
 
-    def parse_date_value(self, field, date_value):
+    def _parse_date_value(self, field, date_value):
         dateformat = self._get_metadata_option(field, 'dateformat')
 
         if not dateformat:
@@ -122,7 +122,7 @@ class DataclassReader:
 
             if field.type is datetime:
                 try:
-                    transformed_value = self.parse_date_value(field, value)
+                    transformed_value = self._parse_date_value(field, value)
                 except ValueError:
                     raise
                 else:
