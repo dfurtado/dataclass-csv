@@ -202,9 +202,9 @@ decorator will be used.
 ### Handling values with empty spaces
 
 When defining a property of type `str` in the `dataclass`, the `DataclassReader` will treat values with only white spaces as invalid. To change this
-behaviour, there is a decorator called `@accept_whitespaces`. When decorating the class with the `@accept_whitespaces` and properties in the class
+behavior, there is a decorator called `@accept_whitespaces`. When decorating the class with the `@accept_whitespaces` all the properties in the class
 will accept values with only white spaces.
-If you need an specific field to accept white spaces, you can set the propety `accept_whitespaces` in the field's metadata, like so:
+If you need a specific field to accept white spaces, you can set the property `accept_whitespaces` in the field's metadata, like so:
 
 ```python
 @dataclass
