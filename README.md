@@ -125,7 +125,7 @@ reader.map('First name').to('firstname')
 
 Now the DataclassReader will know how to extract the data from the column **First Name** and add it to the to dataclass property **firstname**
 
-## Supported type annotation
+### Supported type annotation
 
 At the moment the `DataclassReader` support `int`, `str`, `float`, `complex` and `datetime`. When defining a `datetime` property, it is necessary to use the `dateformat` decorator, for example:
 
@@ -163,6 +163,56 @@ The output would look like this:
 
 ```text
 User(name='Edit', email='edit@test.com', birthday=datetime.datetime(2018, 11, 23, 0, 0))
+```
+
+### Fields metadata
+
+It is important to note that the `dateformat` decorator will define the date format that will be used to parse date to all properties
+in the class. Now there are situations that the data in a CSV file contains two or more columns with date values in different formats. It is possible
+to set a format specific for every property using the `dataclasses.field`. Let's say that we now have a CSV file with the following contents:
+
+```text
+name,email,birthday, create_date
+Edit,edit@test.com,2018/11/23,2018/11/23 10:43
+```
+
+As you can see the `create_date` contains time information as well.
+
+The `dataclass` User can be defined like this:
+
+```python
+from dataclasses import dataclass, field
+from datetime import datetime
+
+from dataclass_csv import DataclassReader, dateformat
+
+
+@dataclass
+@dateformat('%Y/%m/%d')
+class User:
+    name: str
+    email: str
+    birthday: datetime
+    create_date: datetime = field(metadata={'dateformat': '%Y/%m/%d %H:%M'})
+```
+
+Note that the format for the `birthday` field was not speficied using the `field` metadata. In this case the format specified in the `dateformat`
+decorator will be used.
+
+### Handling values with empty spaces
+
+When defining a property of type `str` in the `dataclass`, the `DataclassReader` will treat values with only white spaces as invalid. To change this
+behavior, there is a decorator called `@accept_whitespaces`. When decorating the class with the `@accept_whitespaces` all the properties in the class
+will accept values with only white spaces.
+If you need a specific field to accept white spaces, you can set the property `accept_whitespaces` in the field's metadata, like so:
+
+```python
+@dataclass
+class User:
+    name: str
+    email: str = field(metadata={'accept_whitespaces': True})
+    birthday: datetime
+    created_at: datetime
 ```
 
 ## Copyright and License
