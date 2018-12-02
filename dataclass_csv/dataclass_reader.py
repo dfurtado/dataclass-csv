@@ -34,10 +34,12 @@ class DataclassReader:
         )
 
     def _get_optional_fields(self):
+
         return [
             field.name
             for field in dataclasses.fields(self.cls)
             if not isinstance(field.default, dataclasses._MISSING_TYPE)
+            or not isinstance(field.default_factory, dataclasses._MISSING_TYPE)
         ]
 
     def _add_to_mapping(self, property_name, csv_fieldname):
@@ -46,6 +48,13 @@ class DataclassReader:
     def _get_metadata_option(self, field, key):
         option = field.metadata.get(key, getattr(self.cls, f'__{key}__', None))
         return option
+
+    def _get_default_value(self, field):
+        return (
+            field.default
+            if not isinstance(field.default, dataclasses._MISSING_TYPE)
+            else field.default_factory()
+        )
 
     def _get_value(self, row, field):
         try:
@@ -57,14 +66,14 @@ class DataclassReader:
             value = row[key]
         except KeyError:
             if field.name in self.optional_fields:
-                return field.default
+                return self._get_default_value(field)
             else:
                 raise KeyError(
                     f'The value `{field.name}` is missing in the CSV file.'
                 )
         else:
             if not value and field.name in self.optional_fields:
-                return field.default
+                return self._get_default_value(field)
             elif not value and field.name not in self.optional_fields:
                 raise ValueError(
                     (
@@ -116,7 +125,7 @@ class DataclassReader:
         for field in dataclasses.fields(self.cls):
             value = self._get_value(row, field)
 
-            if (not value and field.default is None):
+            if not value and field.default is None:
                 values.append(None)
                 continue
 
