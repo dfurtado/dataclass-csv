@@ -1,3 +1,9 @@
+[![Build Status](https://travis-ci.org/dfurtado/dataclass-csv.svg?branch=master)](https://travis-ci.org/dfurtado/dataclass-csv)
+[![pypi](https://img.shields.io/pypi/v/dataclass-csv.svg)](https://pypi.python.org/pypi/dataclass-csv)
+[![Downloads](https://pepy.tech/badge/dataclass-csv)](https://pepy.tech/project/dataclass-csv)
+
+
+
 # Dataclass CSV
 
 Dataclass CSV makes working with CSV files easier and much better than working with Dicts. It uses Python's Dataclasses to store data of every row on the CSV file and also uses type annotations which enables proper type checking and validation.
