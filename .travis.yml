@@ -1,0 +1,9 @@
+language: python
+python:
+  - "3.7-dev"
+# command to install dependencies
+install:
+  - "pip install pipenv"
+  - "pipenv install"
+# command to run tests
+script: pytest
