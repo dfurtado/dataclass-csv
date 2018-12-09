@@ -43,7 +43,7 @@ def test_use_decorator_when_metadata_is_not_defined(create_csv):
         {
             'name': 'Test',
             'birthday': '1977-08-26',
-            'create_date': '2018-12-09 11:11'
+            'create_date': '2018-12-09 11:11',
         }
     )
 

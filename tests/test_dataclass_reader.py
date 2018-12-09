@@ -1,15 +1,9 @@
 import pytest
 import dataclasses
 
-from datetime import datetime
-
 from dataclass_csv import DataclassReader
 
-
-@dataclasses.dataclass
-class User:
-    name: str
-    age: int
+from .mocks import User
 
 
 def test_reader_with_non_dataclass(create_csv):
@@ -20,7 +14,7 @@ def test_reader_with_non_dataclass(create_csv):
 
     with csv_file.open() as f:
         with pytest.raises(ValueError):
-            reader = DataclassReader(f, DummyUser)
+            DataclassReader(f, DummyUser)
 
 
 def test_reader_with_none_class(create_csv):
@@ -28,13 +22,13 @@ def test_reader_with_none_class(create_csv):
 
     with csv_file.open() as f:
         with pytest.raises(ValueError):
-            reader = DataclassReader(f, None)
+            DataclassReader(f, None)
 
 
 def test_reader_with_none_file():
 
     with pytest.raises(ValueError):
-        reader = DataclassReader(None, User)
+        DataclassReader(None, User)
 
 
 def test_reader_with_correct_values(create_csv):
@@ -42,9 +36,7 @@ def test_reader_with_correct_values(create_csv):
 
     with csv_file.open() as f:
         reader = DataclassReader(f, User)
-        items = list(reader)
-
-        assert True
+        list(reader)
 
 
 def test_reader_values(create_csv):

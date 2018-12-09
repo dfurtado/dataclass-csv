@@ -6,6 +6,12 @@ from dataclass_csv import dateformat, accept_whitespaces
 
 
 @dataclasses.dataclass
+class User:
+    name: str
+    age: int
+
+
+@dataclasses.dataclass
 class UserWithoutAcceptWhiteSpacesDecorator:
     name: str
 
