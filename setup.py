@@ -21,7 +21,7 @@ setup(
     author="Daniel Furtado",
     author_email='daniel@dfurtado.com',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
@@ -46,6 +46,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/dfurtado/dataclass-csv',
-    version='0.1.7',
+    version='1.0.0',
     zip_safe=False,
 )

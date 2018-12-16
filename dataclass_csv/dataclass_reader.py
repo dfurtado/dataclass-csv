@@ -1,9 +1,10 @@
 import dataclasses
+import csv
 
 from datetime import datetime
-from csv import DictReader
 
 from .field_mapper import FieldMapper
+from .exceptions import CsvValueError
 
 
 class DataclassReader:
@@ -20,21 +21,20 @@ class DataclassReader:
     ):
 
         if not f:
-            raise ValueError('The f argument is required')
+            raise ValueError('The f argument is required.')
 
         if cls is None or not dataclasses.is_dataclass(cls):
-            raise ValueError('cls argument needs to be a dataclass')
+            raise ValueError('cls argument needs to be a dataclass.')
 
         self.cls = cls
         self.optional_fields = self._get_optional_fields()
         self.field_mapping = {}
 
-        self.reader = DictReader(
+        self.reader = csv.DictReader(
             f, fieldnames, restkey, restval, dialect, *args, **kwds
         )
 
     def _get_optional_fields(self):
-
         return [
             field.name
             for field in dataclasses.fields(self.cls)
@@ -75,12 +75,7 @@ class DataclassReader:
             if not value and field.name in self.optional_fields:
                 return self._get_default_value(field)
             elif not value and field.name not in self.optional_fields:
-                raise ValueError(
-                    (
-                        f'The field `{field.name}` is required. Verify if any '
-                        'row in the CSV file is missing this data.'
-                    )
-                )
+                raise ValueError((f'The field `{field.name}` is required.'))
             elif (
                 value
                 and field.type is str
@@ -91,11 +86,12 @@ class DataclassReader:
                     (
                         f'It seems like the value of `{field.name}` contains '
                         'only white spaces. To allow white spaces to all '
-                        'string fields, use the @accept_whitespaces decorator. '
+                        'string fields, use the @accept_whitespaces '
+                        'decorator. '
                         'To allow white spaces specifically for the field '
                         f'`{field.name}` change its definition to: '
                         f'`{field.name}: str = field(metadata='
-                        '{\'accept_whitespaces\': True})`'
+                        '{\'accept_whitespaces\': True})`.'
                     )
                 )
             else:
@@ -105,7 +101,7 @@ class DataclassReader:
         dateformat = self._get_metadata_option(field, 'dateformat')
 
         if not dateformat:
-            raise ValueError(
+            raise AttributeError(
                 (
                     'Unable to parse the datetime string value. Date format '
                     'not specified. To specify a date format for all '
@@ -113,7 +109,7 @@ class DataclassReader:
                     'decorator. To define a date format specifically for this '
                     'field, change its definition to: '
                     f'`{field.name}: datetime = field(metadata='
-                    '{\'dateformat\': <date_format>})`'
+                    '{\'dateformat\': <date_format>})`.'
                 )
             )
 
@@ -123,7 +119,12 @@ class DataclassReader:
         values = []
 
         for field in dataclasses.fields(self.cls):
-            value = self._get_value(row, field)
+            try:
+                value = self._get_value(row, field)
+            except ValueError as ex:
+                raise CsvValueError(
+                    ex, line_number=self.reader.line_num
+                ) from None
 
             if not value and field.default is None:
                 values.append(None)
@@ -132,8 +133,10 @@ class DataclassReader:
             if field.type is datetime:
                 try:
                     transformed_value = self._parse_date_value(field, value)
-                except ValueError:
-                    raise
+                except ValueError as ex:
+                    raise CsvValueError(
+                        ex, line_number=self.reader.line_num
+                    ) from None
                 else:
                     values.append(transformed_value)
                     continue
@@ -141,12 +144,13 @@ class DataclassReader:
             try:
                 transformed_value = field.type(value)
             except ValueError:
-                raise ValueError(
+                raise CsvValueError(
                     (
                         f'The field `{field.name}` is defined as {field.type} '
                         f'but received a value of type {type(value)}.'
-                    )
-                )
+                    ),
+                    line_number=self.reader.line_num
+                ) from None
             else:
                 values.append(transformed_value)
 

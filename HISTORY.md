@@ -31,3 +31,10 @@
 ### 0.1.7 (2018-12-01)
 
 * Added support for default values from `default_factory` in the field's metadata. This allows adding mutable default values to the dataclass properties.
+
+### 1.0.0 (2018-12-16)
+
+* When a data does not pass validation it shows the line number in the CSV file where the data contain errors.
+* Improved error handling.
+* Changed the usage of the `@accept_whitespaces` decorator.
+* Updated documentation.

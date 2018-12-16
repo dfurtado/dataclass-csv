@@ -1,6 +1,6 @@
 import pytest
 
-from dataclass_csv import DataclassReader
+from dataclass_csv import DataclassReader, CsvValueError
 
 from .mocks import (
     UserWithoutDateFormatDecorator,
@@ -17,7 +17,7 @@ def test_should_raise_error_without_dateformat(create_csv):
     csv_file = create_csv({'name': 'Test', 'create_date': '2018-12-09'})
 
     with csv_file.open('r') as f:
-        with pytest.raises(ValueError):
+        with pytest.raises(AttributeError):
             reader = DataclassReader(f, UserWithoutDateFormatDecorator)
             list(reader)
 
@@ -56,7 +56,7 @@ def test_should_raise_error_when_value_is_whitespaces(create_csv):
     csv_file = create_csv({'name': '     '})
 
     with csv_file.open('r') as f:
-        with pytest.raises(ValueError):
+        with pytest.raises(CsvValueError):
             reader = DataclassReader(f, UserWithoutAcceptWhiteSpacesDecorator)
             list(reader)
 
