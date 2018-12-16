@@ -69,7 +69,16 @@ with open(filename) as users_csv:
 The `DataclassReader` internally uses the `DictReader` from the `csv` module to read the CSV file which means that you can pass the same arguments that you would pass to the `DictReader`. The complete argument list is shown below:
 
 ```python
-dataclass_csv.DataclassReader(f, cls, fieldnames=None, restkey=None, restval=None, dialect='excel', *args, **kwds)
+dataclass_csv.DataclassReader(
+    f, 
+    cls, 
+    fieldnames=None, 
+    restkey=None, 
+    restval=None, 
+    dialect='excel', 
+    *args, 
+    **kwds
+)
 ```
 
 If you run this code you should see an output like this:
@@ -94,7 +103,8 @@ Astor, astor@test.com, test
 Remember that in the dataclass `User` the `age` property is annotated with `int`. If we run the code again an exception will be raised with the message below:
 
 ```text
-dataclass_csv.exceptions.CsvValueError: The field `age` is defined as <class 'int'> but received a value of type <class 'str'>. [CSV Line number: 3]
+dataclass_csv.exceptions.CsvValueError: The field `age` is defined as <class 'int'> but 
+received a value of type <class 'str'>. [CSV Line number: 3]
 ```
 
 Note that apart from telling what the error was, the `DataclassReader` will also show which line of the CSV file contain the data with errors.
