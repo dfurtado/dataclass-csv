@@ -16,7 +16,7 @@ class UserWithoutAcceptWhiteSpacesDecorator:
     name: str
 
 
-@accept_whitespaces()
+@accept_whitespaces
 @dataclasses.dataclass
 class UserWithAcceptWhiteSpacesDecorator:
     name: str
