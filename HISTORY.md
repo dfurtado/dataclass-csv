@@ -36,4 +36,5 @@
 
 * When a data does not pass validation it shows the line number in the CSV file where the data contain errors.
 * Improved error handling.
+* Changed the usage of the `@accept_whitespaces` decorator.
 * Updated documentation.

@@ -70,13 +70,13 @@ The `DataclassReader` internally uses the `DictReader` from the `csv` module to 
 
 ```python
 dataclass_csv.DataclassReader(
-    f, 
-    cls, 
-    fieldnames=None, 
-    restkey=None, 
-    restval=None, 
-    dialect='excel', 
-    *args, 
+    f,
+    cls,
+    fieldnames=None,
+    restkey=None,
+    restval=None,
+    dialect='excel',
+    *args,
     **kwds
 )
 ```
@@ -103,7 +103,7 @@ Astor, astor@test.com, test
 Remember that in the dataclass `User` the `age` property is annotated with `int`. If we run the code again an exception will be raised with the message below:
 
 ```text
-dataclass_csv.exceptions.CsvValueError: The field `age` is defined as <class 'int'> but 
+dataclass_csv.exceptions.CsvValueError: The field `age` is defined as <class 'int'> but
 received a value of type <class 'str'>. [CSV Line number: 3]
 ```
 
@@ -253,6 +253,21 @@ decorator will be used.
 When defining a property of type `str` in the `dataclass`, the `DataclassReader` will treat values with only white spaces as invalid. To change this
 behavior, there is a decorator called `@accept_whitespaces`. When decorating the class with the `@accept_whitespaces` all the properties in the class
 will accept values with only white spaces.
+
+For example:
+
+```python
+from dataclass_csv import DataclassReader, accept_whitespaces
+
+@accept_whitespaces
+@dataclass
+class User:
+    name: str
+    email: str
+    birthday: datetime
+    created_at: datetime
+```
+
 If you need a specific field to accept white spaces, you can set the property `accept_whitespaces` in the field's metadata, like so:
 
 ```python
