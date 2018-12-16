@@ -93,8 +93,8 @@ Astor, astor@test.com, test
 
 Remember that in the dataclass `User` the `age` property is annotated with `int`. If we run the code again an exception will be raised with the message below:
 
-```python
-dataclass_csv.exceptions.CsvValueError: Error: The field `age` is defined as <class 'int'> but received a value of type <class 'str'>. [CSV Line number: 3]
+```text
+dataclass_csv.exceptions.CsvValueError: The field `age` is defined as <class 'int'> but received a value of type <class 'str'>. [CSV Line number: 3]
 ```
 
 Note that apart from telling what the error was, the `DataclassReader` will also show which line of the CSV file contain the data with errors.
