@@ -9,12 +9,12 @@ def dateformat(date_format):
     return func
 
 
-def accept_whitespaces(cls=None):
+def accept_whitespaces(_cls=None):
     def func(cls):
         cls.__accept_whitespaces__ = True
         return cls
 
-    if cls:
-        return func(cls)
+    if _cls:
+        return func(_cls)
 
     return func
