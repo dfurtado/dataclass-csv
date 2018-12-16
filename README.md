@@ -8,6 +8,19 @@
 
 Dataclass CSV makes working with CSV files easier and much better than working with Dicts. It uses Python's Dataclasses to store data of every row on the CSV file and also uses type annotations which enables proper type checking and validation.
 
+
+## Main features
+
+- Use `dataclasses` instead of dictionaries to represent the rows in the CSV file.
+- Take advantage of the `dataclass` properties type annotation. `DataclassReader` use the type annotation to perform validation of the data of the CSV file.
+- Automatic type conversion. `DataclassReader` convert date to `str`, `int`, `float`, `complex` and `datetime`
+- Helps you troubleshooting issues with the data in the CSV file. `DataclassReader` will show exactly in which line of the CSV file contain errors.
+- Extract only the data you need. It will only parse the properties defined in the `dataclass`
+- Familar syntax. It is used almost the same way as the `DictReader` in the standard library.
+- It uses `dataclass` features that lets you define metadata properties so the data can be parsed exactly the way you want.
+- Make the code cleaner. No more extra loops to convert data to the correct type, perform validation, set default values, the `DataclassReader` will do all this for you.
+
+
 ## Installation
 
 ```shell
