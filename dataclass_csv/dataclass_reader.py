@@ -35,7 +35,6 @@ class DataclassReader:
         )
 
     def _get_optional_fields(self):
-
         return [
             field.name
             for field in dataclasses.fields(self.cls)
@@ -76,11 +75,7 @@ class DataclassReader:
             if not value and field.name in self.optional_fields:
                 return self._get_default_value(field)
             elif not value and field.name not in self.optional_fields:
-                raise ValueError(
-                    (
-                        f'The field `{field.name}` is required.'
-                    )
-                )
+                raise ValueError((f'The field `{field.name}` is required.'))
             elif (
                 value
                 and field.type is str
@@ -91,7 +86,8 @@ class DataclassReader:
                     (
                         f'It seems like the value of `{field.name}` contains '
                         'only white spaces. To allow white spaces to all '
-                        'string fields, use the @accept_whitespaces decorator. '
+                        'string fields, use the @accept_whitespaces '
+                        'decorator. '
                         'To allow white spaces specifically for the field '
                         f'`{field.name}` change its definition to: '
                         f'`{field.name}: str = field(metadata='
@@ -126,7 +122,9 @@ class DataclassReader:
             try:
                 value = self._get_value(row, field)
             except ValueError as ex:
-                raise CsvValueError(ex, line_number = self.reader.line_num) from None
+                raise CsvValueError(
+                    ex, line_number=self.reader.line_num
+                ) from None
 
             if not value and field.default is None:
                 values.append(None)
@@ -136,7 +134,9 @@ class DataclassReader:
                 try:
                     transformed_value = self._parse_date_value(field, value)
                 except ValueError as ex:
-                    raise CsvValueError(ex, line_number = self.reader.line_num) from None
+                    raise CsvValueError(
+                        ex, line_number=self.reader.line_num
+                    ) from None
                 else:
                     values.append(transformed_value)
                     continue
@@ -148,7 +148,8 @@ class DataclassReader:
                     (
                         f'The field `{field.name}` is defined as {field.type} '
                         f'but received a value of type {type(value)}.'
-                    ), line_number = self.reader.line_num
+                    ),
+                    line_number=self.reader.line_num
                 ) from None
             else:
                 values.append(transformed_value)

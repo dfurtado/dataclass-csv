@@ -1,5 +1,4 @@
 class CsvValueError(Exception):
-
     def __init__(self, msg, line_number):
         self.msg = msg
         self.line_number = line_number
