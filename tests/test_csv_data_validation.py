@@ -48,3 +48,30 @@ def test_should_raise_error_when_required_value_is_emptyspaces(create_csv):
         with pytest.raises(CsvValueError):
             reader = DataclassReader(f, User)
             list(reader)
+
+
+def test_csv_header_items_with_spaces_with_missing_props_raises_keyerror(create_csv):
+    csv_file = create_csv({'  name': 'User1'})
+
+    with csv_file.open() as f:
+        with pytest.raises(KeyError):
+            reader = DataclassReader(f, User)
+            items = list(reader)
+
+
+def test_csv_header_items_with_spaces_with_missing_value(create_csv):
+    csv_file = create_csv({'  name': 'User1', 'age   ': None})
+
+    with csv_file.open() as f:
+        with pytest.raises(CsvValueError):
+            reader = DataclassReader(f, User)
+            items = list(reader)
+
+
+def test_csv_header_items_with_spaces_with_prop_with_wrong_type(create_csv):
+    csv_file = create_csv({'  name': 'User1', 'age   ': 'this should be an int'})
+
+    with csv_file.open() as f:
+        with pytest.raises(CsvValueError):
+            reader = DataclassReader(f, User)
+            items = list(reader)

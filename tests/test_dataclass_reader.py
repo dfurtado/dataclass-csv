@@ -60,3 +60,31 @@ def test_reader_values(create_csv):
 
         assert user2.name == 'User2'
         assert user2.age == 30
+
+def test_csv_header_items_with_spaces(create_csv):
+    csv_file = create_csv({'  name': 'User1', 'age   ': 40})
+
+    with csv_file.open() as f:
+        reader = DataclassReader(f, User)
+        items = list(reader)
+
+        assert items and len(items) > 0
+
+        user = items[0]
+
+        assert user.name == 'User1'
+        assert user.age == 40
+
+def test_csv_header_items_with_spaces_together_with_skipinitialspaces(create_csv):
+    csv_file = create_csv({'  name': 'User1', 'age   ': 40})
+
+    with csv_file.open() as f:
+        reader = DataclassReader(f, User, skipinitialspace=True)
+        items = list(reader)
+
+        assert items and len(items) > 0
+
+        user = items[0]
+
+        assert user.name == 'User1'
+        assert user.age == 40
