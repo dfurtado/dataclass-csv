@@ -56,6 +56,13 @@ class DataclassReader:
             else field.default_factory()
         )
 
+    def _get_possible_keys(self, fieldname, row):
+        possible_keys = list(
+            filter(lambda x: x.strip() == fieldname, row.keys())
+        )
+        if possible_keys:
+            return possible_keys[0]
+
     def _get_value(self, row, field):
         try:
             key = (
@@ -63,7 +70,14 @@ class DataclassReader:
                 if field.name not in self.field_mapping.keys()
                 else self.field_mapping.get(field.name)
             )
-            value = row[key]
+
+            if key in row.keys():
+                value = row[key]
+            else:
+                possible_key = self._get_possible_keys(field.name, row)
+                key = possible_key if possible_key else key
+                value = row[key]
+
         except KeyError:
             if field.name in self.optional_fields:
                 return self._get_default_value(field)
@@ -149,7 +163,7 @@ class DataclassReader:
                         f'The field `{field.name}` is defined as {field.type} '
                         f'but received a value of type {type(value)}.'
                     ),
-                    line_number=self.reader.line_num
+                    line_number=self.reader.line_num,
                 ) from None
             else:
                 values.append(transformed_value)

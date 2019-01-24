@@ -7,5 +7,5 @@ __all__ = [
     'DataclassReader',
     'dateformat',
     'accept_whitespaces',
-    'CsvValueError'
+    'CsvValueError',
 ]
