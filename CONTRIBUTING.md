@@ -1,9 +1,9 @@
 # Contributing
 
 I love to work together with people so if you have an excellent idea for a feature, improvements or maybe you found
-some bug, please, don't hesitate in adding an issue, so we can discuss and find a good solution together.
+a bug. Please, don't hesitate in adding an issue, so we can discuss and find a good solution together.
 
-If you never participated in any open-source project before even better! I can help you through the process. The
+If you never participated in any open-source project before it is even better! I can help you through the process. The
 important thing is to get more people involved in the Python community. So, don't be shy!
 
 ## Getting started
@@ -43,18 +43,19 @@ improving the current documentation on README are very welcome.
 
 If you get an issue to work on, then you can:
 
-1. Fork the project
-2. Create a new branch
-3. Hack away!
-4. Submit the pull request when you are ready
+- Fork the project
+- Create a new branch
+- Hack away!
+- Submit the pull request when you are ready
 
 
 ## Before you submit a pull request
 
-1. Make sure to add unit tests (if applicable)
-2. Make sure all tests are passing
-3. Run a code formatter. This project uses black, you can run the command: `black -l79 -N -S ./dataclass_csv`
-4. Add docstrings for new functions and classes.
+- Make sure to add unit tests (if applicable)
+- Make sure all tests are passing
+- Run a code formatter. This project uses black, you can run the command: `black -l79 -N -S ./dataclass_csv`
+- Add docstrings for new functions and classes.
+
 
 
 Happy Hacking!!!
