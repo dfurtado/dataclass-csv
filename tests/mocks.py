@@ -10,7 +10,6 @@ class User:
     name: str
     age: int
 
-
 @dataclasses.dataclass
 class UserWithoutAcceptWhiteSpacesDecorator:
     name: str
@@ -56,3 +55,8 @@ class UserWithDateFormatDecoratorAndMetadata:
     create_date: datetime = dataclasses.field(
         metadata={'dateformat': '%Y-%m-%d %H:%M'}
     )
+
+
+@dataclasses.dataclass
+class DataclassWithBooleanValue:
+    boolValue: bool

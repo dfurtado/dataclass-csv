@@ -7,6 +7,8 @@ name = "pypi"
 pytest = "*"
 
 [packages]
+dataclass-csv = "*"
+str2bool = "*"
 
 [requires]
 python_version = "3.7"

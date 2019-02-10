@@ -1,5 +1,6 @@
 import dataclasses
 import csv
+from str2bool import str2bool
 
 from datetime import datetime
 
@@ -129,6 +130,14 @@ class DataclassReader:
 
         return datetime.strptime(date_value, dateformat)
 
+    def _parse_bool_value(self, bool_value):
+        """Parses `str` representation of a boolean value to a `bool`. Case-insensitive.
+        Values which will be parsed as True: 'yes', 'true', 't', 'y', '1'
+        Values which will be parsed as False: 'no', 'false', 'f', 'n', '0'
+        All other values will be parsed as None
+        """
+        return str2bool(bool_value)
+
     def _process_row(self, row):
         values = []
 
@@ -154,6 +163,11 @@ class DataclassReader:
                 else:
                     values.append(transformed_value)
                     continue
+
+            if field.type is bool:
+                transformed_value = self._parse_bool_value(value)
+                values.append(transformed_value)
+                continue
 
             try:
                 transformed_value = field.type(value)

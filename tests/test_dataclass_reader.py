@@ -3,7 +3,7 @@ import dataclasses
 
 from dataclass_csv import DataclassReader
 
-from .mocks import User
+from .mocks import User, DataclassWithBooleanValue
 
 
 def test_reader_with_non_dataclass(create_csv):
@@ -26,7 +26,6 @@ def test_reader_with_none_class(create_csv):
 
 
 def test_reader_with_none_file():
-
     with pytest.raises(ValueError):
         DataclassReader(None, User)
 
@@ -61,6 +60,7 @@ def test_reader_values(create_csv):
         assert user2.name == 'User2'
         assert user2.age == 30
 
+
 def test_csv_header_items_with_spaces(create_csv):
     csv_file = create_csv({'  name': 'User1', 'age   ': 40})
 
@@ -75,6 +75,7 @@ def test_csv_header_items_with_spaces(create_csv):
         assert user.name == 'User1'
         assert user.age == 40
 
+
 def test_csv_header_items_with_spaces_together_with_skipinitialspaces(create_csv):
     csv_file = create_csv({'  name': 'User1', 'age   ': 40})
 
@@ -88,3 +89,29 @@ def test_csv_header_items_with_spaces_together_with_skipinitialspaces(create_csv
 
         assert user.name == 'User1'
         assert user.age == 40
+
+
+def test_parse_bool_value(create_csv):
+    for true_value in ['yes', 'true', 't', 'y', '1']:
+        csv_file = create_csv({'name': 'User1', 'age': 40, 'boolValue': '{}'.format(true_value)})
+        with csv_file.open() as f:
+            reader = DataclassReader(f, DataclassWithBooleanValue)
+            items = list(reader)
+            user = items[0]
+            assert user.boolValue is True
+
+    for false_value in ['no', 'false', 'f', 'n', '0']:
+        csv_file = create_csv({'name': 'User1', 'age': 40, 'boolValue': '{}'.format(false_value)})
+        with csv_file.open() as f:
+            reader = DataclassReader(f, DataclassWithBooleanValue)
+            items = list(reader)
+            user = items[0]
+            assert user.boolValue is False
+
+    for none_value in [None, 'not a bool']:
+        csv_file = create_csv({'name': 'User1', 'age': 40, 'boolValue': '{}'.format(none_value)})
+        with csv_file.open() as f:
+            reader = DataclassReader(f, DataclassWithBooleanValue)
+            items = list(reader)
+            user = items[0]
+            assert user.boolValue is None
