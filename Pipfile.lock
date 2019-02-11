@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b43ec14a4df3a363fb7e44b0af34cb77c25f1774e2e1a2ec9c02d535ab17acd4"
+            "sha256": "e8336336dbbdd3784b4f6f04c425e089571fbe19ec6852e20a6dc31ac8137585"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -15,24 +15,7 @@
             }
         ]
     },
-    "default": {
-        "dataclass-csv": {
-            "hashes": [
-                "sha256:6622efae5524ef0f9f4f7f64b18ac22d046284e53e4e1bbbae458930429d04c8",
-                "sha256:ac8aeba9c67c4d81d52c7ac91f46ec9bb667c4b9a88e763680263ab20de1724e"
-            ],
-            "index": "pypi",
-            "version": "==1.0.1"
-        },
-        "str2bool": {
-            "hashes": [
-                "sha256:483863d6f71f61957c1ce0ad9212cfa05141f7861f4979b67bc8ef71aa277017",
-                "sha256:dbc3c917dca831904bce8568f6fb1f91435fcffc2ec4a46d62c9aa08d7cf77c3"
-            ],
-            "index": "pypi",
-            "version": "==1.1"
-        }
-    },
+    "default": {},
     "develop": {
         "atomicwrites": {
             "hashes": [

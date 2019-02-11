@@ -1,8 +1,8 @@
 import dataclasses
 import csv
-from str2bool import str2bool
 
 from datetime import datetime
+from distutils.util import strtobool
 
 from .field_mapper import FieldMapper
 from .exceptions import CsvValueError
@@ -136,7 +136,10 @@ class DataclassReader:
         Values which will be parsed as False: 'no', 'false', 'f', 'n', '0'
         All other values will be parsed as None
         """
-        return str2bool(bool_value)
+        try:
+            return bool(strtobool(bool_value))
+        except ValueError:
+            return None
 
     def _process_row(self, row):
         values = []

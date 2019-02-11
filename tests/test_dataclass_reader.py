@@ -91,25 +91,28 @@ def test_csv_header_items_with_spaces_together_with_skipinitialspaces(create_csv
         assert user.age == 40
 
 
-def test_parse_bool_value(create_csv):
+def test_parse_bool_value_true(create_csv):
     for true_value in ['yes', 'true', 't', 'y', '1']:
-        csv_file = create_csv({'name': 'User1', 'age': 40, 'boolValue': '{}'.format(true_value)})
+        csv_file = create_csv({'boolValue': f'{true_value}'})
         with csv_file.open() as f:
             reader = DataclassReader(f, DataclassWithBooleanValue)
             items = list(reader)
             user = items[0]
             assert user.boolValue is True
 
+
+def test_parse_bool_value_false(create_csv):
     for false_value in ['no', 'false', 'f', 'n', '0']:
-        csv_file = create_csv({'name': 'User1', 'age': 40, 'boolValue': '{}'.format(false_value)})
+        csv_file = create_csv({'boolValue': f'{false_value}'})
         with csv_file.open() as f:
             reader = DataclassReader(f, DataclassWithBooleanValue)
             items = list(reader)
             user = items[0]
             assert user.boolValue is False
 
+def test_parse_bool_value_none(create_csv):
     for none_value in [None, 'not a bool']:
-        csv_file = create_csv({'name': 'User1', 'age': 40, 'boolValue': '{}'.format(none_value)})
+        csv_file = create_csv({'boolValue': f'{none_value}'})
         with csv_file.open() as f:
             reader = DataclassReader(f, DataclassWithBooleanValue)
             items = list(reader)
