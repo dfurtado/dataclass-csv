@@ -4,7 +4,7 @@ dataclass_csv
 
 The dataclass_csv is a library that parses every row of a CSV file into
 `dataclasses`. It takes advantage of `dataclasses` features to perform
-data validation and type convertion.
+data validation and type conversion.
 
 Basic Usage:
 
