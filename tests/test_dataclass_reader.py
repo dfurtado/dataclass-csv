@@ -97,8 +97,8 @@ def test_parse_bool_value_true(create_csv):
         with csv_file.open() as f:
             reader = DataclassReader(f, DataclassWithBooleanValue)
             items = list(reader)
-            user = items[0]
-            assert user.boolValue is True
+            dataclass_instance = items[0]
+            assert dataclass_instance.boolValue is True
 
 
 def test_parse_bool_value_false(create_csv):
@@ -107,8 +107,9 @@ def test_parse_bool_value_false(create_csv):
         with csv_file.open() as f:
             reader = DataclassReader(f, DataclassWithBooleanValue)
             items = list(reader)
-            user = items[0]
-            assert user.boolValue is False
+            dataclass_instance = items[0]
+            assert dataclass_instance.boolValue is False
+
 
 def test_parse_bool_value_none(create_csv):
     for none_value in [None, 'not a bool']:
@@ -116,5 +117,5 @@ def test_parse_bool_value_none(create_csv):
         with csv_file.open() as f:
             reader = DataclassReader(f, DataclassWithBooleanValue)
             items = list(reader)
-            user = items[0]
-            assert user.boolValue is None
+            dataclass_instance = items[0]
+            assert dataclass_instance.boolValue is None
