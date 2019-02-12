@@ -130,17 +130,6 @@ class DataclassReader:
 
         return datetime.strptime(date_value, dateformat)
 
-    def _parse_bool_value(self, bool_value):
-        """Parses `str` representation of a boolean value to a `bool`. Case-insensitive.
-        Values which will be parsed as True: 'yes', 'true', 't', 'y', '1'
-        Values which will be parsed as False: 'no', 'false', 'f', 'n', '0'
-        All other values will be parsed as None
-        """
-        try:
-            return bool(strtobool(bool_value))
-        except ValueError:
-            return None
-
     def _process_row(self, row):
         values = []
 
@@ -168,9 +157,19 @@ class DataclassReader:
                     continue
 
             if field.type is bool:
-                transformed_value = self._parse_bool_value(value)
-                values.append(transformed_value)
-                continue
+                try:
+                    transformed_value = (
+                        value
+                        if isinstance(value, bool)
+                        else strtobool(value.strip()) == 1
+                    )
+                except ValueError as ex:
+                    raise CsvValueError(
+                        ex, line_number=self.reader.line_num
+                    ) from None
+                else:
+                    values.append(transformed_value)
+                    continue
 
             try:
                 transformed_value = field.type(value)

@@ -60,3 +60,8 @@ class UserWithDateFormatDecoratorAndMetadata:
 @dataclasses.dataclass
 class DataclassWithBooleanValue:
     boolValue: bool
+
+
+@dataclasses.dataclass
+class DataclassWithBooleanValueNoneDefault:
+    boolValue: bool = None

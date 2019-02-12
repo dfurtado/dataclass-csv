@@ -1,9 +1,9 @@
 import pytest
 import dataclasses
 
-from dataclass_csv import DataclassReader
+from dataclass_csv import DataclassReader, CsvValueError
 
-from .mocks import User, DataclassWithBooleanValue
+from .mocks import User, DataclassWithBooleanValue, DataclassWithBooleanValueNoneDefault
 
 
 def test_reader_with_non_dataclass(create_csv):
@@ -111,11 +111,22 @@ def test_parse_bool_value_false(create_csv):
             assert dataclass_instance.boolValue is False
 
 
-def test_parse_bool_value_none(create_csv):
-    for none_value in [None, 'not a bool']:
-        csv_file = create_csv({'boolValue': f'{none_value}'})
-        with csv_file.open() as f:
+def test_parse_bool_value_invalid(create_csv):
+    csv_file = create_csv({'boolValue': 'notValidBoolean'})
+    with csv_file.open() as f:
+        try:
             reader = DataclassReader(f, DataclassWithBooleanValue)
-            items = list(reader)
-            dataclass_instance = items[0]
-            assert dataclass_instance.boolValue is None
+            list(reader)
+            assert False  # Should not be able to successfully parse
+        except CsvValueError:
+            pass
+
+
+def test_parse_bool_value_none_default(create_csv):
+    """Verify that blank/null values are parsed as None for optional fields"""
+    csv_file = create_csv({'boolValue': ''})
+    with csv_file.open() as f:
+        reader = DataclassReader(f, DataclassWithBooleanValueNoneDefault)
+        items = list(reader)
+        dataclass_instance = items[0]
+        assert dataclass_instance.boolValue is None
