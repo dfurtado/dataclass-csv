@@ -179,7 +179,7 @@ class DataclassReader:
 
     def map(self, csv_fieldname):
         """Used to map a field in the CSV file to a `dataclass` field
-        param: csv_fieldname - The name of the CSV field
+        :param csv_fieldname: The name of the CSV field
         """
         return FieldMapper(
             lambda property_name: self._add_to_mapping(

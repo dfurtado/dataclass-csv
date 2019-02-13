@@ -6,7 +6,7 @@ class FieldMapper:
     def __init__(self, callback):
         def to(property_name):
             """Specify the dataclass field to receive the value
-            :param property_name - The dataclass property that
+            :param property_name: The dataclass property that
             will receive the csv value.
             """
 
