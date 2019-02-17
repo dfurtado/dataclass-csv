@@ -48,6 +48,10 @@
 * Added support for boolean values.
 * Docstrings
 
-### 1.1.1 (2019-01-29)
+### 1.1.1 (2019-02-17)
+
+* Documentation fixes.
+
+### 1.1.2 (2019-02-17)
 
 * Documentation fixes.
