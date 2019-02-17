@@ -38,3 +38,12 @@
 * Improved error handling.
 * Changed the usage of the `@accept_whitespaces` decorator.
 * Updated documentation.
+
+### 1.0.1 (2019-01-29)
+
+* Fixed issue when parsing headers on a CSV file with trailing white spaces.
+
+### 1.1.0 (2019-02-17)
+
+* Added support for boolean values.
+* Docstrings
