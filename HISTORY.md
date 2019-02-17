@@ -47,3 +47,7 @@
 
 * Added support for boolean values.
 * Docstrings
+
+### 1.1.1 (2019-01-29)
+
+* Documentation fixes.
