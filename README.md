@@ -176,7 +176,7 @@ Now the DataclassReader will know how to extract the data from the column **Firs
 
 ## Supported type annotation
 
-At the moment the `DataclassReader` support `int`, `str`, `float`, `complex` and `datetime`. When defining a `datetime` property, it is necessary to use the `dateformat` decorator, for example:
+At the moment the `DataclassReader` support `int`, `str`, `float`, `complex`, `datetime`, and `bool`. When defining a `datetime` property, it is necessary to use the `dateformat` decorator, for example:
 
 ```python
 from dataclasses import dataclass

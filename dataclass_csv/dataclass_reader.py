@@ -2,6 +2,7 @@ import dataclasses
 import csv
 
 from datetime import datetime
+from distutils.util import strtobool
 
 from .field_mapper import FieldMapper
 from .exceptions import CsvValueError
@@ -147,6 +148,21 @@ class DataclassReader:
             if field.type is datetime:
                 try:
                     transformed_value = self._parse_date_value(field, value)
+                except ValueError as ex:
+                    raise CsvValueError(
+                        ex, line_number=self.reader.line_num
+                    ) from None
+                else:
+                    values.append(transformed_value)
+                    continue
+
+            if field.type is bool:
+                try:
+                    transformed_value = (
+                        value
+                        if isinstance(value, bool)
+                        else strtobool(value.strip()) == 1
+                    )
                 except ValueError as ex:
                     raise CsvValueError(
                         ex, line_number=self.reader.line_num
