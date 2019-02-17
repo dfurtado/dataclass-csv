@@ -13,7 +13,7 @@ Dataclass CSV makes working with CSV files easier and much better than working w
 
 - Use `dataclasses` instead of dictionaries to represent the rows in the CSV file.
 - Take advantage of the `dataclass` properties type annotation. `DataclassReader` use the type annotation to perform validation of the data of the CSV file.
-- Automatic type conversion. `DataclassReader` supports `str`, `int`, `float`, `complex` and `datetime`
+- Automatic type conversion. `DataclassReader` supports `str`, `int`, `float`, `complex`, `datetime` and `bool`.
 - Helps you troubleshoot issues with the data in the CSV file. `DataclassReader` will show exactly in which line of the CSV file contain errors.
 - Extract only the data you need. It will only parse the properties defined in the `dataclass`
 - Familiar syntax. The `DataclassReader` is used almost the same way as the `DictReader` in the standard library.
