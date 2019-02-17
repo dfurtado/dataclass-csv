@@ -161,7 +161,7 @@ class DataclassReader:
                     transformed_value = (
                         value
                         if isinstance(value, bool)
-                        else strtobool(value.strip()) == 1
+                        else strtobool(str(value).strip()) == 1
                     )
                 except ValueError as ex:
                     raise CsvValueError(
