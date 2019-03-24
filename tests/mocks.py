@@ -65,3 +65,17 @@ class DataclassWithBooleanValue:
 @dataclasses.dataclass
 class DataclassWithBooleanValueNoneDefault:
     boolValue: bool = None
+
+
+@dataclasses.dataclass
+class UserWithInitFalse:
+    firstname: str
+    lastname: str
+    age: int = dataclasses.field(init=False)
+
+
+@dataclasses.dataclass
+class UserWithInitFalseAndDefaultValue:
+    firstname: str
+    lastname: str
+    age: int = dataclasses.field(init=False, default=0)

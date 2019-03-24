@@ -31,6 +31,7 @@ class DataclassReader:
         self.optional_fields = self._get_optional_fields()
         self.field_mapping = {}
 
+
         self.reader = csv.DictReader(
             f, fieldnames, restkey, restval, dialect, *args, **kwds
         )
@@ -134,6 +135,9 @@ class DataclassReader:
         values = []
 
         for field in dataclasses.fields(self.cls):
+            if not field.init:
+                continue
+
             try:
                 value = self._get_value(row, field)
             except ValueError as ex:
