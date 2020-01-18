@@ -4,6 +4,8 @@ from datetime import datetime
 
 from dataclass_csv import dateformat, accept_whitespaces
 
+from typing import Optional
+
 
 @dataclasses.dataclass
 class User:
@@ -65,3 +67,10 @@ class DataclassWithBooleanValue:
 @dataclasses.dataclass
 class DataclassWithBooleanValueNoneDefault:
     boolValue: bool = None
+
+
+@dataclasses.dataclass
+class UserWithOptionalAge:
+    name: str
+    age: Optional[int]
+

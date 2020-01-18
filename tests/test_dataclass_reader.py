@@ -3,7 +3,7 @@ import dataclasses
 
 from dataclass_csv import DataclassReader, CsvValueError
 
-from .mocks import User, DataclassWithBooleanValue, DataclassWithBooleanValueNoneDefault
+from .mocks import User, UserWithOptionalAge, DataclassWithBooleanValue, DataclassWithBooleanValueNoneDefault
 
 
 def test_reader_with_non_dataclass(create_csv):
@@ -130,3 +130,13 @@ def test_parse_bool_value_none_default(create_csv):
         items = list(reader)
         dataclass_instance = items[0]
         assert dataclass_instance.boolValue is None
+
+
+def test_reader_with_optional_types(create_csv):
+    csv_file = create_csv({'name': 'User', 'age': 40})
+
+    with csv_file.open() as f:
+        reader = DataclassReader(f, UserWithOptionalAge)
+        list(reader)
+
+
