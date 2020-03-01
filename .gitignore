@@ -15,3 +15,5 @@ docs
 build
 dist
 .eggs
+.vscode
+gmon.out

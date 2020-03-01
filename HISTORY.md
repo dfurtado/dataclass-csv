@@ -55,3 +55,9 @@
 ### 1.1.2 (2019-02-17)
 
 * Documentation fixes.
+
+### 1.1.3 (2020-03-01)
+
+* Handle properties with init set to False
+* Handle Option type annotation
+
