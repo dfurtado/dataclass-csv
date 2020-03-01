@@ -3,7 +3,14 @@ import dataclasses
 
 from dataclass_csv import DataclassReader, CsvValueError
 
-from .mocks import User, UserWithOptionalAge, DataclassWithBooleanValue, DataclassWithBooleanValueNoneDefault
+from .mocks import (
+    User,
+    UserWithOptionalAge,
+    DataclassWithBooleanValue,
+    DataclassWithBooleanValueNoneDefault,
+    UserWithInitFalse,
+    UserWithInitFalseAndDefaultValue,
+)
 
 
 def test_reader_with_non_dataclass(create_csv):
@@ -114,16 +121,12 @@ def test_parse_bool_value_false(create_csv):
 def test_parse_bool_value_invalid(create_csv):
     csv_file = create_csv({'boolValue': 'notValidBoolean'})
     with csv_file.open() as f:
-        try:
+        with pytest.raises(CsvValueError):
             reader = DataclassReader(f, DataclassWithBooleanValue)
             list(reader)
-            assert False  # Should not be able to successfully parse
-        except CsvValueError:
-            pass
 
 
 def test_parse_bool_value_none_default(create_csv):
-    """Verify that blank/null values are parsed as None for optional fields"""
     csv_file = create_csv({'boolValue': ''})
     with csv_file.open() as f:
         reader = DataclassReader(f, DataclassWithBooleanValueNoneDefault)
@@ -132,11 +135,35 @@ def test_parse_bool_value_none_default(create_csv):
         assert dataclass_instance.boolValue is None
 
 
+def test_skip_dataclass_field_when_init_is_false(create_csv):
+    csv_file = create_csv({'firstname': 'User1', 'lastname': 'TestUser'})
+    with csv_file.open() as f:
+        reader = DataclassReader(f, UserWithInitFalse)
+        items = list(reader)
+
+
+def test_try_to_access_not_initialized_prop_raise_attr_error(create_csv):
+    csv_file = create_csv({'firstname': 'User1', 'lastname': 'TestUser'})
+    with csv_file.open() as f:
+        reader = DataclassReader(f, UserWithInitFalse)
+        items = list(reader)
+        with pytest.raises(AttributeError):
+            user = items[0]
+            user_age = user.age
+
+
+def test_try_to_access_not_initialized_prop_with_default_value(create_csv):
+    csv_file = create_csv({'firstname': 'User1', 'lastname': 'TestUser'})
+    with csv_file.open() as f:
+        reader = DataclassReader(f, UserWithInitFalseAndDefaultValue)
+        items = list(reader)
+        user = items[0]
+        assert user.age == 0
+
+
 def test_reader_with_optional_types(create_csv):
     csv_file = create_csv({'name': 'User', 'age': 40})
 
     with csv_file.open() as f:
         reader = DataclassReader(f, UserWithOptionalAge)
         list(reader)
-
-
