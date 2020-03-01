@@ -5,6 +5,7 @@ from dataclass_csv import DataclassReader, CsvValueError
 
 from .mocks import (
     User,
+    UserWithOptionalAge,
     DataclassWithBooleanValue,
     DataclassWithBooleanValueNoneDefault,
     UserWithInitFalse,
@@ -158,3 +159,11 @@ def test_try_to_access_not_initialized_prop_with_default_value(create_csv):
         items = list(reader)
         user = items[0]
         assert user.age == 0
+
+
+def test_reader_with_optional_types(create_csv):
+    csv_file = create_csv({'name': 'User', 'age': 40})
+
+    with csv_file.open() as f:
+        reader = DataclassReader(f, UserWithOptionalAge)
+        list(reader)

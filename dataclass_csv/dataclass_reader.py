@@ -3,6 +3,7 @@ import csv
 
 from datetime import datetime
 from distutils.util import strtobool
+from typing import Union
 
 from .field_mapper import FieldMapper
 from .exceptions import CsvValueError
@@ -149,7 +150,22 @@ class DataclassReader:
                 values.append(None)
                 continue
 
-            if field.type is datetime:
+            field_type = field.type
+            # Special handling for Optional (Union of a single real type and None)
+            if (
+                # The first part of the condition is for Python < 3.8
+                type(field_type).__name__ == '_Union'
+                # The second part of the condition is for Python >= 3.8
+                or '__origin__' in field_type.__dict__
+                and field_type.__origin__ is Union
+            ):
+                real_types = [
+                    t for t in field_type.__args__ if t is not type(None)
+                ]
+                if len(real_types) == 1:
+                    field_type = real_types[0]
+
+            if field_type is datetime:
                 try:
                     transformed_value = self._parse_date_value(field, value)
                 except ValueError as ex:
@@ -160,7 +176,7 @@ class DataclassReader:
                     values.append(transformed_value)
                     continue
 
-            if field.type is bool:
+            if field_type is bool:
                 try:
                     transformed_value = (
                         value
@@ -176,7 +192,7 @@ class DataclassReader:
                     continue
 
             try:
-                transformed_value = field.type(value)
+                transformed_value = field_type(value)
             except ValueError:
                 raise CsvValueError(
                     (

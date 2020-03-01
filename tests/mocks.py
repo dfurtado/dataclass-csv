@@ -4,6 +4,8 @@ from datetime import datetime
 
 from dataclass_csv import dateformat, accept_whitespaces
 
+from typing import Optional
+
 
 @dataclasses.dataclass
 class User:
@@ -79,3 +81,9 @@ class UserWithInitFalseAndDefaultValue:
     firstname: str
     lastname: str
     age: int = dataclasses.field(init=False, default=0)
+
+@dataclasses.dataclass
+class UserWithOptionalAge:
+    name: str
+    age: Optional[int]
+
