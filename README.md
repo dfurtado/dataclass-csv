@@ -49,7 +49,7 @@ Ella,ella@test.com, 2
 Let's create a dataclass that will represent a row in the CSV file above:
 ```python
 @dataclass
-class User():
+class User:
     firstname: str
     email: str
     age: int
@@ -118,7 +118,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class User():
+class User:
     firstname: str
     email: str = 'Not specified'
     age: int
@@ -148,7 +148,7 @@ from dataclasses import dataclass, field
 
 
 @dataclass
-class User():
+class User:
     firstname: str
     email: str = field(default='Not specified')
     age: int
