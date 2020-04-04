@@ -117,6 +117,9 @@ class DataclassReader:
     def _parse_date_value(self, field, date_value):
         dateformat = self._get_metadata_option(field, 'dateformat')
 
+        if not isinstance(date_value, str):
+            return date_value
+
         if not dateformat:
             raise AttributeError(
                 (
@@ -129,7 +132,6 @@ class DataclassReader:
                     '{\'dateformat\': <date_format>})`.'
                 )
             )
-
         return datetime.strptime(date_value, dateformat)
 
     def _process_row(self, row):
@@ -203,7 +205,6 @@ class DataclassReader:
                 ) from None
             else:
                 values.append(transformed_value)
-
         return self.cls(*values)
 
     def __next__(self):
