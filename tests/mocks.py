@@ -87,3 +87,7 @@ class UserWithOptionalAge:
     name: str
     age: Optional[int]
 
+@dataclasses.dataclass
+class UserWithDefaultDatetimeField:
+    name: str
+    birthday: datetime = datetime.now()

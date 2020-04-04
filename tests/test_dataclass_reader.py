@@ -1,6 +1,7 @@
 import pytest
 import dataclasses
 
+from datetime import datetime
 from dataclass_csv import DataclassReader, CsvValueError
 
 from .mocks import (
@@ -10,6 +11,7 @@ from .mocks import (
     DataclassWithBooleanValueNoneDefault,
     UserWithInitFalse,
     UserWithInitFalseAndDefaultValue,
+    UserWithDefaultDatetimeField,
 )
 
 
@@ -167,3 +169,12 @@ def test_reader_with_optional_types(create_csv):
     with csv_file.open() as f:
         reader = DataclassReader(f, UserWithOptionalAge)
         list(reader)
+
+def test_reader_with_datetime_default_value(create_csv):
+    csv_file = create_csv({'name': 'User', 'bithday': ''})
+
+    with csv_file.open() as f:
+        reader = DataclassReader(f, UserWithDefaultDatetimeField)
+        items = list(reader)
+        assert len(items) > 0
+        assert isinstance(items[0].birthday, datetime)
