@@ -1,4 +1,5 @@
 import dataclasses
+import re
 
 from datetime import datetime
 
@@ -91,3 +92,19 @@ class UserWithOptionalAge:
 class UserWithDefaultDatetimeField:
     name: str
     birthday: datetime = datetime.now()
+
+
+class SSN:
+    def __init__(self, val):
+        if re.match(r"\d{9}", val):
+            self.val = f"{val[0:3]}-{val[3:5]}-{val[5:9]}"
+        elif re.match(r"\d{3}-\d{2}-\d{4}", val):
+            self.val = val
+        else:
+            raise ValueError(f"Invalid SSN: {val!r}")
+
+
+@dataclasses.dataclass
+class UserWithSSN:
+    name: str
+    ssn: SSN

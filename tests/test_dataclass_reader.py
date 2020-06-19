@@ -12,6 +12,8 @@ from .mocks import (
     UserWithInitFalse,
     UserWithInitFalseAndDefaultValue,
     UserWithDefaultDatetimeField,
+    UserWithSSN,
+    SSN,
 )
 
 
@@ -178,3 +180,21 @@ def test_reader_with_datetime_default_value(create_csv):
         items = list(reader)
         assert len(items) > 0
         assert isinstance(items[0].birthday, datetime)
+
+
+def test_should_parse_user_defined_types(create_csv):
+    csv_file = create_csv([
+        {'name': 'User1', 'ssn': '123-45-6789'},
+        {'name': 'User1', 'ssn': '123456789'},
+    ])
+
+    with csv_file.open() as f:
+        reader = DataclassReader(f, UserWithSSN)
+        items = list(reader)
+        assert len(items) == 2
+
+        assert isinstance(items[0].ssn, SSN)
+        assert items[0].ssn.val == '123-45-6789'
+
+        assert isinstance(items[1].ssn, SSN)
+        assert items[1].ssn.val == '123-45-6789'
