@@ -195,14 +195,14 @@ class DataclassReader:
 
             try:
                 transformed_value = field_type(value)
-            except ValueError:
+            except ValueError as e:
                 raise CsvValueError(
                     (
                         f'The field `{field.name}` is defined as {field.type} '
                         f'but received a value of type {type(value)}.'
                     ),
                     line_number=self.reader.line_num,
-                ) from None
+                ) from e
             else:
                 values.append(transformed_value)
         return self.cls(*values)

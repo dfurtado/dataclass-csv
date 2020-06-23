@@ -13,7 +13,7 @@ Dataclass CSV makes working with CSV files easier and much better than working w
 
 - Use `dataclasses` instead of dictionaries to represent the rows in the CSV file.
 - Take advantage of the `dataclass` properties type annotation. `DataclassReader` use the type annotation to perform validation of the data of the CSV file.
-- Automatic type conversion. `DataclassReader` supports `str`, `int`, `float`, `complex`, `datetime` and `bool`.
+- Automatic type conversion. `DataclassReader` supports `str`, `int`, `float`, `complex`, `datetime` and `bool`, as well as any type whose constructor accepts a string as its single argument.
 - Helps you troubleshoot issues with the data in the CSV file. `DataclassReader` will show exactly in which line of the CSV file contain errors.
 - Extract only the data you need. It will only parse the properties defined in the `dataclass`
 - Familiar syntax. The `DataclassReader` is used almost the same way as the `DictReader` in the standard library.
@@ -277,6 +277,27 @@ class User:
     email: str = field(metadata={'accept_whitespaces': True})
     birthday: datetime
     created_at: datetime
+```
+
+## User-defined types
+
+You can use any type for a field as long as its constructor accepts a string:
+
+```python
+class SSN:
+    def __init__(self, val):
+        if re.match(r"\d{9}", val):
+            self.val = f"{val[0:3]}-{val[3:5]}-{val[5:9]}"
+        elif re.match(r"\d{3}-\d{2}-\d{4}", val):
+            self.val = val
+        else:
+            raise ValueError(f"Invalid SSN: {val!r}")
+
+
+@dataclasses.dataclass
+class User:
+    name: str
+    ssn: SSN
 ```
 
 ## Copyright and License
