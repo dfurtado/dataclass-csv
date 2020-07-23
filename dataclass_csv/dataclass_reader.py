@@ -6,7 +6,7 @@ from distutils.util import strtobool
 from typing import Union
 
 from .field_mapper import FieldMapper
-from .exceptions import CsvValueError
+from .exceptions import CsvValueError, MappedColumnNotFoundError
 
 
 class DataclassReader:
@@ -67,12 +67,14 @@ class DataclassReader:
             return possible_keys[0]
 
     def _get_value(self, row, field):
+        is_field_mapped = False
+
         try:
-            key = (
-                field.name
-                if field.name not in self.field_mapping.keys()
-                else self.field_mapping.get(field.name)
-            )
+            if field.name in self.field_mapping.keys():
+                is_field_mapped = True
+                key = self.field_mapping.get(field.name)
+            else:
+                key = field.name
 
             if key in row.keys():
                 value = row[key]
@@ -85,14 +87,19 @@ class DataclassReader:
             if field.name in self.optional_fields:
                 return self._get_default_value(field)
             else:
-                raise KeyError(
-                    f'The value `{field.name}` is missing in the CSV file.'
-                )
+                if is_field_mapped:
+                    raise MappedColumnNotFoundError(
+                        f'The mapped column `{key}` is missing in the CSV file'
+                    )
+                else:
+                    raise KeyError(
+                        f'The value `{field.name}` is missing in the CSV file.'
+                    )
         else:
             if not value and field.name in self.optional_fields:
                 return self._get_default_value(field)
             elif not value and field.name not in self.optional_fields:
-                raise ValueError((f'The field `{field.name}` is required.'))
+                raise ValueError(f'The field `{field.name}` is required.')
             elif (
                 value
                 and field.type is str

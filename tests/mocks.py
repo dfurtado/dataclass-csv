@@ -108,3 +108,10 @@ class SSN:
 class UserWithSSN:
     name: str
     ssn: SSN
+
+
+@dataclasses.dataclass
+class UserWithEmail:
+    name: str
+    email: str
+

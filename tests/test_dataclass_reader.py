@@ -2,7 +2,7 @@ import pytest
 import dataclasses
 
 from datetime import datetime
-from dataclass_csv import DataclassReader, CsvValueError
+from dataclass_csv import DataclassReader, CsvValueError, MappedColumnNotFoundError
 
 from .mocks import (
     User,
@@ -14,6 +14,7 @@ from .mocks import (
     UserWithDefaultDatetimeField,
     UserWithSSN,
     SSN,
+    UserWithEmail,
 )
 
 
@@ -173,7 +174,7 @@ def test_reader_with_optional_types(create_csv):
         list(reader)
 
 def test_reader_with_datetime_default_value(create_csv):
-    csv_file = create_csv({'name': 'User', 'bithday': ''})
+    csv_file = create_csv({'name': 'User', 'birthday': ''})
 
     with csv_file.open() as f:
         reader = DataclassReader(f, UserWithDefaultDatetimeField)
@@ -198,3 +199,23 @@ def test_should_parse_user_defined_types(create_csv):
 
         assert isinstance(items[1].ssn, SSN)
         assert items[1].ssn.val == '123-45-6789'
+
+
+def test_raise_error_when_mapped_column_not_found(create_csv):
+    csv_file = create_csv({'name': 'User1', 'e-mail': 'test@test.com'})
+
+    with csv_file.open() as f:
+        with pytest.raises(MappedColumnNotFoundError):
+            reader = DataclassReader(f, UserWithEmail)
+            reader.map('e_mail').to('email')
+            list(reader)
+
+
+def test_raise_error_when_field_not_found(create_csv):
+    csv_file = create_csv({'name': 'User1', 'e-mail': 'test@test.com'})
+
+    with csv_file.open() as f:
+        with pytest.raises(KeyError):
+            reader = DataclassReader(f, UserWithEmail)
+            list(reader)
+

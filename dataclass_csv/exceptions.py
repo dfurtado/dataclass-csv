@@ -7,3 +7,7 @@ class CsvValueError(Exception):
 
     def __str__(self):
         return f'{self.error} [CSV Line number: {self.line_number}]'
+
+
+class MappedColumnNotFoundError(Exception):
+    pass

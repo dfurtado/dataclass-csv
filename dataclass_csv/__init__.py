@@ -35,7 +35,7 @@ Basic Usage:
 
 from .dataclass_reader import DataclassReader
 from .decorators import dateformat, accept_whitespaces
-from .exceptions import CsvValueError
+from .exceptions import CsvValueError, MappedColumnNotFoundError
 
 
 __all__ = [
@@ -43,4 +43,5 @@ __all__ = [
     'dateformat',
     'accept_whitespaces',
     'CsvValueError',
+    'MappedColumnNotFoundError',
 ]
