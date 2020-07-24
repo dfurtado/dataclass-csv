@@ -35,13 +35,7 @@ Basic Usage:
 
 from .dataclass_reader import DataclassReader
 from .decorators import dateformat, accept_whitespaces
-from .exceptions import CsvValueError, MappedColumnNotFoundError
+from .exceptions import CsvValueError
 
 
-__all__ = [
-    'DataclassReader',
-    'dateformat',
-    'accept_whitespaces',
-    'CsvValueError',
-    'MappedColumnNotFoundError',
-]
+__all__ = ['DataclassReader', 'dateformat', 'accept_whitespaces', 'CsvValueError']

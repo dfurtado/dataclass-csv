@@ -2,7 +2,7 @@ import pytest
 import dataclasses
 
 from datetime import datetime
-from dataclass_csv import DataclassReader, CsvValueError, MappedColumnNotFoundError
+from dataclass_csv import DataclassReader, CsvValueError
 
 from .mocks import (
     User,
@@ -205,7 +205,7 @@ def test_raise_error_when_mapped_column_not_found(create_csv):
     csv_file = create_csv({'name': 'User1', 'e-mail': 'test@test.com'})
 
     with csv_file.open() as f:
-        with pytest.raises(MappedColumnNotFoundError):
+        with pytest.raises(KeyError, match='The value for the mapped column `e_mail` is missing in the CSV file'):
             reader = DataclassReader(f, UserWithEmail)
             reader.map('e_mail').to('email')
             list(reader)
@@ -215,7 +215,7 @@ def test_raise_error_when_field_not_found(create_csv):
     csv_file = create_csv({'name': 'User1', 'e-mail': 'test@test.com'})
 
     with csv_file.open() as f:
-        with pytest.raises(KeyError):
+        with pytest.raises(KeyError, match='The value for the column `email` is missing in the CSV file.'):
             reader = DataclassReader(f, UserWithEmail)
             list(reader)
 
