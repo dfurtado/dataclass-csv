@@ -32,7 +32,6 @@ class DataclassReader:
         self.optional_fields = self._get_optional_fields()
         self.field_mapping = {}
 
-
         self.reader = csv.DictReader(
             f, fieldnames, restkey, restval, dialect, *args, **kwds
         )
@@ -60,19 +59,19 @@ class DataclassReader:
         )
 
     def _get_possible_keys(self, fieldname, row):
-        possible_keys = list(
-            filter(lambda x: x.strip() == fieldname, row.keys())
-        )
+        possible_keys = list(filter(lambda x: x.strip() == fieldname, row.keys()))
         if possible_keys:
             return possible_keys[0]
 
     def _get_value(self, row, field):
+        is_field_mapped = False
+
         try:
-            key = (
-                field.name
-                if field.name not in self.field_mapping.keys()
-                else self.field_mapping.get(field.name)
-            )
+            if field.name in self.field_mapping.keys():
+                is_field_mapped = True
+                key = self.field_mapping.get(field.name)
+            else:
+                key = field.name
 
             if key in row.keys():
                 value = row[key]
@@ -85,14 +84,15 @@ class DataclassReader:
             if field.name in self.optional_fields:
                 return self._get_default_value(field)
             else:
-                raise KeyError(
-                    f'The value `{field.name}` is missing in the CSV file.'
-                )
+                keyerror_message = f'The value for the column `{field.name}` is missing in the CSV file.'
+                if is_field_mapped:
+                    keyerror_message = f'The value for the mapped column `{key}` is missing in the CSV file'
+                raise KeyError(keyerror_message)
         else:
             if not value and field.name in self.optional_fields:
                 return self._get_default_value(field)
             elif not value and field.name not in self.optional_fields:
-                raise ValueError((f'The field `{field.name}` is required.'))
+                raise ValueError(f'The field `{field.name}` is required.')
             elif (
                 value
                 and field.type is str
@@ -144,9 +144,7 @@ class DataclassReader:
             try:
                 value = self._get_value(row, field)
             except ValueError as ex:
-                raise CsvValueError(
-                    ex, line_number=self.reader.line_num
-                ) from None
+                raise CsvValueError(ex, line_number=self.reader.line_num) from None
 
             if not value and field.default is None:
                 values.append(None)
@@ -161,9 +159,7 @@ class DataclassReader:
                 or '__origin__' in field_type.__dict__
                 and field_type.__origin__ is Union
             ):
-                real_types = [
-                    t for t in field_type.__args__ if t is not type(None)
-                ]
+                real_types = [t for t in field_type.__args__ if t is not type(None)]
                 if len(real_types) == 1:
                     field_type = real_types[0]
 
@@ -171,9 +167,7 @@ class DataclassReader:
                 try:
                     transformed_value = self._parse_date_value(field, value)
                 except ValueError as ex:
-                    raise CsvValueError(
-                        ex, line_number=self.reader.line_num
-                    ) from None
+                    raise CsvValueError(ex, line_number=self.reader.line_num) from None
                 else:
                     values.append(transformed_value)
                     continue
@@ -186,9 +180,7 @@ class DataclassReader:
                         else strtobool(str(value).strip()) == 1
                     )
                 except ValueError as ex:
-                    raise CsvValueError(
-                        ex, line_number=self.reader.line_num
-                    ) from None
+                    raise CsvValueError(ex, line_number=self.reader.line_num) from None
                 else:
                     values.append(transformed_value)
                     continue
@@ -219,7 +211,5 @@ class DataclassReader:
         :param csv_fieldname: The name of the CSV field
         """
         return FieldMapper(
-            lambda property_name: self._add_to_mapping(
-                property_name, csv_fieldname
-            )
+            lambda property_name: self._add_to_mapping(property_name, csv_fieldname)
         )
