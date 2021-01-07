@@ -67,7 +67,7 @@ class DataclassWithBooleanValue:
 
 @dataclasses.dataclass
 class DataclassWithBooleanValueNoneDefault:
-    boolValue: bool = None
+    boolValue: Optional[bool] = None
 
 
 @dataclasses.dataclass
