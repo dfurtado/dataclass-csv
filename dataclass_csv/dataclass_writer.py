@@ -1,9 +1,10 @@
 import csv
 import dataclasses
+from typing import Type, Dict, Any, List, Iterable
 
 
 class DataclassWriter:
-    def __init__(self, f, data, cls, dialect="excel", **fmtparams):
+    def __init__(self, f: Iterable[str], data: List[Any], cls: Type[object], dialect: str="excel", **fmtparams: Dict[str, Any]):
         if not f:
             raise ValueError("The f argument is required")
 
@@ -20,7 +21,7 @@ class DataclassWriter:
 
         self.writer = csv.writer(f, dialect=dialect, **fmtparams)
 
-    def write(self, skip_header=False):
+    def write(self, skip_header: bool=False):
 
         if not skip_header:
             self.writer.writerow(self.fieldnames)
