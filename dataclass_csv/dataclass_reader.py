@@ -3,7 +3,7 @@ import csv
 
 from datetime import datetime
 from distutils.util import strtobool
-from typing import Union
+from typing import Union, Type, Optional, Sequence, Dict, Any, List
 
 from .field_mapper import FieldMapper
 from .exceptions import CsvValueError
@@ -13,13 +13,13 @@ class DataclassReader:
     def __init__(
         self,
         f,
-        cls,
-        fieldnames=None,
-        restkey=None,
-        restval=None,
-        dialect='excel',
-        *args,
-        **kwds,
+        cls: Type[object],
+        fieldnames: Optional[Sequence[str]]=None,
+        restkey: Optional[str]=None,
+        restval: Optional[Any]=None,
+        dialect: str='excel',
+        *args: List[Any],
+        **kwds: Dict[str, Any],
     ):
 
         if not f:
@@ -30,7 +30,7 @@ class DataclassReader:
 
         self.cls = cls
         self.optional_fields = self._get_optional_fields()
-        self.field_mapping = {}
+        self.field_mapping: Dict[str, Dict[str, Any]] = {}
 
         self.reader = csv.DictReader(
             f, fieldnames, restkey, restval, dialect, *args, **kwds
@@ -206,7 +206,7 @@ class DataclassReader:
     def __iter__(self):
         return self
 
-    def map(self, csv_fieldname):
+    def map(self, csv_fieldname: str) -> FieldMapper:
         """Used to map a field in the CSV file to a `dataclass` field
         :param csv_fieldname: The name of the CSV field
         """
