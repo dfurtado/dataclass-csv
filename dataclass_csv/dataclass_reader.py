@@ -14,10 +14,10 @@ class DataclassReader:
         self,
         f,
         cls: Type[object],
-        fieldnames: Optional[Sequence[str]]=None,
-        restkey: Optional[str]=None,
-        restval: Optional[Any]=None,
-        dialect: str='excel',
+        fieldnames: Optional[Sequence[str]] = None,
+        restkey: Optional[str] = None,
+        restval: Optional[Any] = None,
+        dialect: str = 'excel',
         *args: List[Any],
         **kwds: Dict[str, Any],
     ):
@@ -59,7 +59,9 @@ class DataclassReader:
         )
 
     def _get_possible_keys(self, fieldname, row):
-        possible_keys = list(filter(lambda x: x.strip() == fieldname, row.keys()))
+        possible_keys = list(
+            filter(lambda x: x.strip() == fieldname, row.keys())
+        )
         if possible_keys:
             return possible_keys[0]
 
@@ -144,7 +146,9 @@ class DataclassReader:
             try:
                 value = self._get_value(row, field)
             except ValueError as ex:
-                raise CsvValueError(ex, line_number=self.reader.line_num) from None
+                raise CsvValueError(
+                    ex, line_number=self.reader.line_num
+                ) from None
 
             if not value and field.default is None:
                 values.append(None)
@@ -159,7 +163,9 @@ class DataclassReader:
                 or '__origin__' in field_type.__dict__
                 and field_type.__origin__ is Union
             ):
-                real_types = [t for t in field_type.__args__ if t is not type(None)]
+                real_types = [
+                    t for t in field_type.__args__ if t is not type(None)
+                ]
                 if len(real_types) == 1:
                     field_type = real_types[0]
 
@@ -167,7 +173,9 @@ class DataclassReader:
                 try:
                     transformed_value = self._parse_date_value(field, value)
                 except ValueError as ex:
-                    raise CsvValueError(ex, line_number=self.reader.line_num) from None
+                    raise CsvValueError(
+                        ex, line_number=self.reader.line_num
+                    ) from None
                 else:
                     values.append(transformed_value)
                     continue
@@ -180,7 +188,9 @@ class DataclassReader:
                         else strtobool(str(value).strip()) == 1
                     )
                 except ValueError as ex:
-                    raise CsvValueError(ex, line_number=self.reader.line_num) from None
+                    raise CsvValueError(
+                        ex, line_number=self.reader.line_num
+                    ) from None
                 else:
                     values.append(transformed_value)
                     continue
@@ -211,5 +221,7 @@ class DataclassReader:
         :param csv_fieldname: The name of the CSV field
         """
         return FieldMapper(
-            lambda property_name: self._add_to_mapping(property_name, csv_fieldname)
+            lambda property_name: self._add_to_mapping(
+                property_name, csv_fieldname
+            )
         )

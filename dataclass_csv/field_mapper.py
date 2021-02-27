@@ -1,5 +1,6 @@
 from typing import Any, Callable
 
+
 class FieldMapper:
     """The `FieldMapper` class is used to explicitly map a field
     in the CSV file to a specific `dataclass` field.

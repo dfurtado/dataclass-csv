@@ -2,6 +2,7 @@ from typing import Any, Callable, TypeVar, Type
 
 F = TypeVar('F', bound=Callable[..., Any])
 
+
 def dateformat(date_format: str) -> Callable[[F], F]:
     """The dateformat decorator is used to specify the format
     the `DataclassReader` should use when parsing datetime strings.
@@ -29,7 +30,7 @@ def dateformat(date_format: str) -> Callable[[F], F]:
     return func
 
 
-def accept_whitespaces(_cls: Type[Any]=None) -> Callable[[F], F]:
+def accept_whitespaces(_cls: Type[Any] = None) -> Callable[[F], F]:
     """The accept_whitespaces decorator tells the `DataclassReader`
     that `str` fields defined in the `dataclass` should accept
     values containing only white spaces.

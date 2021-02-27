@@ -5,7 +5,14 @@ from .header_mapper import HeaderMapper
 
 
 class DataclassWriter:
-    def __init__(self, f: Iterable[str], data: List[Any], cls: Type[object], dialect: str="excel", **fmtparams: Dict[str, Any]):
+    def __init__(
+        self,
+        f: Iterable[str],
+        data: List[Any],
+        cls: Type[object],
+        dialect: str = "excel",
+        **fmtparams: Dict[str, Any],
+    ):
         if not f:
             raise ValueError("The f argument is required")
 
@@ -35,7 +42,7 @@ class DataclassWriter:
 
         return mapped_fields
 
-    def write(self, skip_header: bool=False):
+    def write(self, skip_header: bool = False):
         if not skip_header:
             if self.field_mapping:
                 self.fieldnames = self.apply_mapping()
@@ -44,10 +51,12 @@ class DataclassWriter:
 
         for item in self.data:
             if not isinstance(item, self.cls):
-                raise TypeError((
-                    f"The item [{item}] is not an instance of {self.cls.__name__}. "
-                    "All items on the list must be instances of the same type"
-                ))
+                raise TypeError(
+                    (
+                        f"The item [{item}] is not an instance of {self.cls.__name__}. "
+                        "All items on the list must be instances of the same type"
+                    )
+                )
             row = dataclasses.astuple(item)
             self.writer.writerow(row)
 

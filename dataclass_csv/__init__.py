@@ -50,4 +50,10 @@ from .decorators import dateformat, accept_whitespaces
 from .exceptions import CsvValueError
 
 
-__all__ = ['DataclassReader', 'DataclassWriter', 'dateformat', 'accept_whitespaces', 'CsvValueError']
+__all__ = [
+    'DataclassReader',
+    'DataclassWriter',
+    'dateformat',
+    'accept_whitespaces',
+    'CsvValueError',
+]
