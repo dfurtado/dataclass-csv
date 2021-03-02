@@ -61,3 +61,9 @@
 * Handle properties with init set to False
 * Handle Option type annotation
 
+### 1.2.0 (2021-03-02)
+
+* Introduction of a DataclassWriter
+* Added type hinting to external API
+* Documentation updates
+* Bug fixes
