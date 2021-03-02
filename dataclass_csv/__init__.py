@@ -32,10 +32,22 @@ Read data from a CSV file:
 
 Write dataclasses to a CSV file:
 
+    >>> from dataclasses import dataclass
     >>> from dataclass_csv import DataclassWriter
 
-    >>> with open('users-copy.csv', 'w') as f:
-    >>>    writer = DataclassWriter(f, User)
+    >>> @dataclass
+    >>> class User:
+    >>>    firstname: str
+    >>>    lastname: str
+    >>>    age: int
+
+    >>> users = [
+    >>>    User(firstname='User1', lastname='Test', age=23),
+    >>>    User(firstname='User2', lastname='Test', age=34)
+    >>> ]
+
+    >>> with open('users.csv', 'w') as f:
+    >>>    writer = DataclassWriter(f, users, User)
     >>>    writer.write()
 
 
