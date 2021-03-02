@@ -7,7 +7,7 @@ from .header_mapper import HeaderMapper
 class DataclassWriter:
     def __init__(
         self,
-        f: Iterable[str],
+        f: Any,
         data: List[Any],
         cls: Type[object],
         dialect: str = "excel",
@@ -22,43 +22,43 @@ class DataclassWriter:
         if not dataclasses.is_dataclass(cls):
             raise ValueError("Invalid 'cls' argument. It must be a dataclass")
 
-        self.data = data
-        self.cls = cls
-        self.field_mapping = dict()
+        self._data = data
+        self._cls = cls
+        self._field_mapping: Dict[str, str] = dict()
 
-        self.fieldnames = [x.name for x in dataclasses.fields(cls)]
+        self._fieldnames = [x.name for x in dataclasses.fields(cls)]
 
-        self.writer = csv.writer(f, dialect=dialect, **fmtparams)
+        self._writer = csv.writer(f, dialect=dialect, **fmtparams)
 
-    def _add_to_mapping(self, header, propname):
-        self.field_mapping[propname] = header
+    def _add_to_mapping(self, header: str, propname: str):
+        self._field_mapping[propname] = header
 
-    def apply_mapping(self):
+    def _apply_mapping(self):
         mapped_fields = []
 
-        for field in self.fieldnames:
-            mapped_item = self.field_mapping.get(field, field)
+        for field in self._fieldnames:
+            mapped_item = self._field_mapping.get(field, field)
             mapped_fields.append(mapped_item)
 
         return mapped_fields
 
     def write(self, skip_header: bool = False):
         if not skip_header:
-            if self.field_mapping:
-                self.fieldnames = self.apply_mapping()
+            if self._field_mapping:
+                self._fieldnames = self._apply_mapping()
 
-            self.writer.writerow(self.fieldnames)
+            self._writer.writerow(self._fieldnames)
 
-        for item in self.data:
-            if not isinstance(item, self.cls):
+        for item in self._data:
+            if not isinstance(item, self._cls):
                 raise TypeError(
                     (
-                        f"The item [{item}] is not an instance of {self.cls.__name__}. "
+                        f"The item [{item}] is not an instance of {self._cls.__name__}. "
                         "All items on the list must be instances of the same type"
                     )
                 )
             row = dataclasses.astuple(item)
-            self.writer.writerow(row)
+            self._writer.writerow(row)
 
     def map(self, propname: str) -> HeaderMapper:
         """Used to map a field in the dataclass to header item in the CSV file

@@ -3,7 +3,7 @@ import csv
 
 from datetime import datetime
 from distutils.util import strtobool
-from typing import Union, Type, Optional, Sequence, Dict, Any, List
+from typing import Union, Type, Optional, Sequence, Dict, Any, List, Iterable
 
 from .field_mapper import FieldMapper
 from .exceptions import CsvValueError
@@ -12,7 +12,7 @@ from .exceptions import CsvValueError
 class DataclassReader:
     def __init__(
         self,
-        f,
+        f: Any,
         cls: Type[object],
         fieldnames: Optional[Sequence[str]] = None,
         restkey: Optional[str] = None,
