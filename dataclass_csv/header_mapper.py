@@ -7,7 +7,7 @@ class HeaderMapper:
     be different from a dataclass property name.
     """
 
-    def __init__(self, callback: Callable[[str], Any]):
+    def __init__(self, callback: Callable[[str], None]):
         def to(header: str) -> None:
             """Specify how a property in the dataclass will be
             displayed in the CSV file
@@ -16,4 +16,4 @@ class HeaderMapper:
 
             callback(header)
 
-        self.to = to
+        self.to: Callable[[str], None] = to

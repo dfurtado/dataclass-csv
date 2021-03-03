@@ -32,7 +32,7 @@ class DataclassReader:
         self._optional_fields = self._get_optional_fields()
         self._field_mapping: Dict[str, Dict[str, Any]] = {}
 
-        self.reader = csv.DictReader(
+        self._reader = csv.DictReader(
             f, fieldnames, restkey, restval, dialect, *args, **kwds
         )
 
@@ -147,7 +147,7 @@ class DataclassReader:
                 value = self._get_value(row, field)
             except ValueError as ex:
                 raise CsvValueError(
-                    ex, line_number=self.reader.line_num
+                    ex, line_number=self._reader.line_num
                 ) from None
 
             if not value and field.default is None:
@@ -174,7 +174,7 @@ class DataclassReader:
                     transformed_value = self._parse_date_value(field, value)
                 except ValueError as ex:
                     raise CsvValueError(
-                        ex, line_number=self.reader.line_num
+                        ex, line_number=self._reader.line_num
                     ) from None
                 else:
                     values.append(transformed_value)
@@ -189,7 +189,7 @@ class DataclassReader:
                     )
                 except ValueError as ex:
                     raise CsvValueError(
-                        ex, line_number=self.reader.line_num
+                        ex, line_number=self._reader.line_num
                     ) from None
                 else:
                     values.append(transformed_value)
@@ -203,14 +203,14 @@ class DataclassReader:
                         f'The field `{field.name}` is defined as {field.type} '
                         f'but received a value of type {type(value)}.'
                     ),
-                    line_number=self.reader.line_num,
+                    line_number=self._reader.line_num,
                 ) from e
             else:
                 values.append(transformed_value)
         return self._cls(*values)
 
     def __next__(self):
-        row = next(self.reader)
+        row = next(self._reader)
         return self._process_row(row)
 
     def __iter__(self):
