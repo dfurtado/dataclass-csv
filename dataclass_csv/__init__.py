@@ -6,7 +6,10 @@ The dataclass_csv is a library that parses every row of a CSV file into
 `dataclasses`. It takes advantage of `dataclasses` features to perform
 data validation and type conversion.
 
-Basic Usage:
+Basic Usage
+~~~~~~~~~~~~~
+
+Read data from a CSV file:
 
     >>> from dataclasses import dataclass
     >>> from dataclass_csv import DataclassReader
@@ -27,6 +30,26 @@ Basic Usage:
         User(firstname='User2', lastname='Test', age=34)
     ]
 
+Write dataclasses to a CSV file:
+
+    >>> from dataclasses import dataclass
+    >>> from dataclass_csv import DataclassWriter
+
+    >>> @dataclass
+    >>> class User:
+    >>>    firstname: str
+    >>>    lastname: str
+    >>>    age: int
+
+    >>> users = [
+    >>>    User(firstname='User1', lastname='Test', age=23),
+    >>>    User(firstname='User2', lastname='Test', age=34)
+    >>> ]
+
+    >>> with open('users.csv', 'w') as f:
+    >>>    writer = DataclassWriter(f, users, User)
+    >>>    writer.write()
+
 
 :copyright: (c) 2018 by Daniel Furtado.
 :license: BSD, see LICENSE for more details.
@@ -34,8 +57,15 @@ Basic Usage:
 
 
 from .dataclass_reader import DataclassReader
+from .dataclass_writer import DataclassWriter
 from .decorators import dateformat, accept_whitespaces
 from .exceptions import CsvValueError
 
 
-__all__ = ['DataclassReader', 'dateformat', 'accept_whitespaces', 'CsvValueError']
+__all__ = [
+    'DataclassReader',
+    'DataclassWriter',
+    'dateformat',
+    'accept_whitespaces',
+    'CsvValueError',
+]

@@ -13,6 +13,16 @@ class User:
     name: str
     age: int
 
+
+@dataclasses.dataclass
+class SimpleUser:
+    name: str
+
+
+class NonDataclassUser:
+    name: str
+
+
 @dataclasses.dataclass
 class UserWithoutAcceptWhiteSpacesDecorator:
     name: str

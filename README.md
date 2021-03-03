@@ -19,6 +19,8 @@ Dataclass CSV makes working with CSV files easier and much better than working w
 - Familiar syntax. The `DataclassReader` is used almost the same way as the `DictReader` in the standard library.
 - It uses `dataclass` features that let you define metadata properties so the data can be parsed exactly the way you want.
 - Make the code cleaner. No more extra loops to convert data to the correct type, perform validation, set default values, the `DataclassReader` will do all this for you.
+- In additon of the `DataclassReader` the library also provides a `DataclassWriter` which enables creating a CSV file
+using a list of instances of a dataclass.
 
 
 ## Installation
@@ -28,6 +30,8 @@ pipenv install dataclass-csv
 ```
 
 ## Getting started
+
+## Using the DataclassReader
 
 First, add the necessary imports:
 
@@ -90,7 +94,7 @@ User(firstname='Edit', email='edit@test.com', age=3)
 User(firstname='Ella', email='ella@test.com', age=2)
 ```
 
-## Error handling
+### Error handling
 
 One of the advantages of using the `DataclassReader` is that it makes it easy to detect when the type of data in the CSV file is not what your application's model is expecting. And, the `DataclassReader` shows errors that will help to identify the rows with problem in your CSV file.
 
@@ -109,7 +113,7 @@ received a value of type <class 'str'>. [CSV Line number: 3]
 
 Note that apart from telling what the error was, the `DataclassReader` will also show which line of the CSV file contain the data with errors.
 
-## Default values
+### Default values
 
 The `DataclassReader` also handles properties with default values. Let's modify the dataclass `User` and add a default value for the field `email`:
 
@@ -154,7 +158,7 @@ class User:
     age: int
 ```
 
-## Mapping dataclass fields to columns
+### Mapping dataclass fields to columns
 
 The mapping between a dataclass property and a column in the CSV file will be done automatically if the names match, however, there are situations that the name of the header for a column is different. We can easily tell the `DataclassReader` how the mapping should be done using the method `map`. Assuming that we have a CSV file with the contents below:
 
@@ -174,7 +178,7 @@ reader.map('First name').to('firstname')
 
 Now the DataclassReader will know how to extract the data from the column **First Name** and add it to the to dataclass property **firstname**
 
-## Supported type annotation
+### Supported type annotation
 
 At the moment the `DataclassReader` support `int`, `str`, `float`, `complex`, `datetime`, and `bool`. When defining a `datetime` property, it is necessary to use the `dateformat` decorator, for example:
 
@@ -214,7 +218,7 @@ The output would look like this:
 User(name='Edit', email='edit@test.com', birthday=datetime.datetime(2018, 11, 23, 0, 0))
 ```
 
-## Fields metadata
+### Fields metadata
 
 It is important to note that the `dateformat` decorator will define the date format that will be used to parse date to all properties
 in the class. Now there are situations where the data in a CSV file contains two or more columns with date values in different formats. It is possible
@@ -248,7 +252,7 @@ class User:
 Note that the format for the `birthday` field was not speficied using the `field` metadata. In this case the format specified in the `dateformat`
 decorator will be used.
 
-## Handling values with empty spaces
+### Handling values with empty spaces
 
 When defining a property of type `str` in the `dataclass`, the `DataclassReader` will treat values with only white spaces as invalid. To change this
 behavior, there is a decorator called `@accept_whitespaces`. When decorating the class with the `@accept_whitespaces` all the properties in the class
@@ -279,7 +283,7 @@ class User:
     created_at: datetime
 ```
 
-## User-defined types
+### User-defined types
 
 You can use any type for a field as long as its constructor accepts a string:
 
@@ -298,6 +302,100 @@ class SSN:
 class User:
     name: str
     ssn: SSN
+```
+
+
+## Using the DataclassWriter
+
+Reading a CSV file using the `DataclassReader` is great and gives us the type-safety of Python's dataclasses and type annotation, however, there are situations where we would like to use dataclasses for creating CSV files, that's where the `DataclassWriter` comes in handy.
+
+Using the `DataclassWriter` is quite simple. Given that we have a dataclass `User`:
+
+```python
+from dataclasses import dataclass
+
+
+@dataclass
+class User:
+    firstname: str
+    lastname: str
+    age: int
+```
+
+And in your program we have a list of users:
+
+```python
+
+users = [
+    User(firstname="John", lastname="Smith", age=40),
+    User(firstname="Daniel", lastname="Nilsson", age=10),
+    User(firstname="Ella", "Fralla", age=4)
+]
+```
+
+In order to create a CSV using the `DataclassWriter` import it from `dataclass_csv`:
+
+```python
+from dataclass_csv import DataclassWriter
+```
+
+Initialize it with the required arguments and call the method `write`:
+
+```python
+with open("users.csv", "w") as f:
+    w = DataclassWriter(f, users, User)
+    w.writer()
+```
+
+That's it! Let's break down the snippet above.
+
+First, we open a file called `user.csv` for writing. After that, an instance of the `DataclassWriter` is created. To create a `DataclassWriter` we need to pass the `file`, the list of `User` instances, and lastly, the type, which in this case is `User`.
+
+The type is required since the writer uses it when trying to figure out the CSV header. By default, it will use the names of the
+properties defined in the dataclass, in the case of the dataclass `User` the title of each column
+will be `firstname`, `lastname` and `age`.
+
+See below the CSV created out of a list of `User`:
+
+```text
+firstname,lastname,age
+John,Smith,40
+Daniel,Nilsson,10
+Ella,Fralla,4
+```
+
+The `DataclassWriter` also takes a `**fmtparams` which accepts the same parameters as the `csv.writer`, for more
+information see: https://docs.python.org/3/library/csv.html#csv-fmt-params
+
+Now, there are situations where we don't want to write the CSV header. In this case, the method `write` of
+the `DataclassWriter` accepts an extra argument, called `skip_header`. The default value is `False` and when set to
+`True` it will skip the header.
+
+#### Modifying the CSV header
+
+As previously mentioned the `DataclassWriter` uses the names of the properties defined in the dataclass as the CSV header titles, however,
+depending on your use case it makes sense to change it. The `DataclassWriter` has a `map` method just for this purpose.
+
+ Using the `User` dataclass with the properties `firstname`, `lastname` and `age`. The snippet below shows how to change `firstname` to `First name` and `lastname` to `Last name`:
+
+ ```python
+ with open("users.csv", "w") as f:
+    w = DataclassWriter(f, users, User)
+
+    # Add mappings for firstname and lastname
+    w.map("firstname").to("First name")
+    w.map("lastname").to("Last name")
+
+    w.writer()
+ ```
+
+ The CSV output of the snippet above will be:
+
+```text
+First name,Last name,age
+John,Smith,40
+Daniel,Nilsson,10
+Ella,Fralla,4
 ```
 
 ## Copyright and License
