@@ -1,7 +1,10 @@
+from typing import Any
+
+
 class CsvValueError(Exception):
     """Error when a value in the CSV file cannot be parsed."""
 
-    def __init__(self, error, line_number):
+    def __init__(self, error: Any, line_number: int):
         self.error = error
         self.line_number = line_number
 

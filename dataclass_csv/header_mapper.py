@@ -8,7 +8,7 @@ class HeaderMapper:
     """
 
     def __init__(self, callback: Callable[[str], Any]):
-        def to(header):
+        def to(header: str) -> None:
             """Specify how a property in the dataclass will be
             displayed in the CSV file
             :param header: Specify the CSV title for the dataclass property

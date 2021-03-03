@@ -7,7 +7,7 @@ class FieldMapper:
     """
 
     def __init__(self, callback: Callable[[str], Any]):
-        def to(property_name):
+        def to(property_name: str) -> None:
             """Specify the dataclass field to receive the value
             :param property_name: The dataclass property that
             will receive the csv value.
