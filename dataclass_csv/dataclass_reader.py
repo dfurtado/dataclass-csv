@@ -28,9 +28,9 @@ class DataclassReader:
         if cls is None or not dataclasses.is_dataclass(cls):
             raise ValueError('cls argument needs to be a dataclass.')
 
-        self.cls = cls
-        self.optional_fields = self._get_optional_fields()
-        self.field_mapping: Dict[str, Dict[str, Any]] = {}
+        self._cls = cls
+        self._optional_fields = self._get_optional_fields()
+        self._field_mapping: Dict[str, Dict[str, Any]] = {}
 
         self.reader = csv.DictReader(
             f, fieldnames, restkey, restval, dialect, *args, **kwds
@@ -39,16 +39,16 @@ class DataclassReader:
     def _get_optional_fields(self):
         return [
             field.name
-            for field in dataclasses.fields(self.cls)
+            for field in dataclasses.fields(self._cls)
             if not isinstance(field.default, dataclasses._MISSING_TYPE)
             or not isinstance(field.default_factory, dataclasses._MISSING_TYPE)
         ]
 
     def _add_to_mapping(self, property_name, csv_fieldname):
-        self.field_mapping[property_name] = csv_fieldname
+        self._field_mapping[property_name] = csv_fieldname
 
     def _get_metadata_option(self, field, key):
-        option = field.metadata.get(key, getattr(self.cls, f'__{key}__', None))
+        option = field.metadata.get(key, getattr(self._cls, f'__{key}__', None))
         return option
 
     def _get_default_value(self, field):
@@ -69,9 +69,9 @@ class DataclassReader:
         is_field_mapped = False
 
         try:
-            if field.name in self.field_mapping.keys():
+            if field.name in self._field_mapping.keys():
                 is_field_mapped = True
-                key = self.field_mapping.get(field.name)
+                key = self._field_mapping.get(field.name)
             else:
                 key = field.name
 
@@ -83,7 +83,7 @@ class DataclassReader:
                 value = row[key]
 
         except KeyError:
-            if field.name in self.optional_fields:
+            if field.name in self._optional_fields:
                 return self._get_default_value(field)
             else:
                 keyerror_message = f'The value for the column `{field.name}` is missing in the CSV file.'
@@ -91,9 +91,9 @@ class DataclassReader:
                     keyerror_message = f'The value for the mapped column `{key}` is missing in the CSV file'
                 raise KeyError(keyerror_message)
         else:
-            if not value and field.name in self.optional_fields:
+            if not value and field.name in self._optional_fields:
                 return self._get_default_value(field)
-            elif not value and field.name not in self.optional_fields:
+            elif not value and field.name not in self._optional_fields:
                 raise ValueError(f'The field `{field.name}` is required.')
             elif (
                 value
@@ -139,7 +139,7 @@ class DataclassReader:
     def _process_row(self, row):
         values = []
 
-        for field in dataclasses.fields(self.cls):
+        for field in dataclasses.fields(self._cls):
             if not field.init:
                 continue
 
@@ -207,7 +207,7 @@ class DataclassReader:
                 ) from e
             else:
                 values.append(transformed_value)
-        return self.cls(*values)
+        return self._cls(*values)
 
     def __next__(self):
         row = next(self.reader)
