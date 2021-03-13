@@ -42,6 +42,7 @@ setup(
     keywords='dataclass dataclasses csv dataclass-csv',
     name='dataclass-csv',
     packages=find_packages(include=['dataclass_csv']),
+    package_data={'dataclass_csv': ['py.typed', '*.pyi']},
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,

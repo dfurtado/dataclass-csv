@@ -6,8 +6,8 @@ class FieldMapper:
     in the CSV file to a specific `dataclass` field.
     """
 
-    def __init__(self, callback: Callable[[str], Any]):
-        def to(property_name):
+    def __init__(self, callback: Callable[[str], None]):
+        def to(property_name: str) -> None:
             """Specify the dataclass field to receive the value
             :param property_name: The dataclass property that
             will receive the csv value.
@@ -15,4 +15,4 @@ class FieldMapper:
 
             callback(property_name)
 
-        self.to = to
+        self.to: Callable[[str], None] = to

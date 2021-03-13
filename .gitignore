@@ -17,3 +17,5 @@ dist
 .eggs
 .vscode
 gmon.out
+.vim
+pyproject.toml
