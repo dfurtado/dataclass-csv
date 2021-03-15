@@ -1,6 +1,6 @@
 from typing import Any, Callable, TypeVar, Type
 
-F = TypeVar('F', bound=Callable[..., Any])
+F = TypeVar("F", bound=Callable[..., Any])
 
 
 def dateformat(date_format: str) -> Callable[[F], F]:
@@ -21,7 +21,7 @@ def dateformat(date_format: str) -> Callable[[F], F]:
     """
 
     if not date_format or not isinstance(date_format, str):
-        raise ValueError('Invalid value for the date_format argument')
+        raise ValueError("Invalid value for the date_format argument")
 
     def func(cls):
         cls.__dateformat__ = date_format

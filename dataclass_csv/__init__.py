@@ -63,9 +63,9 @@ from .exceptions import CsvValueError
 
 
 __all__ = [
-    'DataclassReader',
-    'DataclassWriter',
-    'dateformat',
-    'accept_whitespaces',
-    'CsvValueError',
+    "DataclassReader",
+    "DataclassWriter",
+    "dateformat",
+    "accept_whitespaces",
+    "CsvValueError",
 ]

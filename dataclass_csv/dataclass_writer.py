@@ -64,6 +64,4 @@ class DataclassWriter:
         """Used to map a field in the dataclass to header item in the CSV file
         :param propname: The name of the property of the dataclass to be mapped
         """
-        return HeaderMapper(
-            lambda header: self._add_to_mapping(header, propname)
-        )
+        return HeaderMapper(lambda header: self._add_to_mapping(header, propname))
