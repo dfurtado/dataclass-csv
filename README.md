@@ -344,7 +344,7 @@ Initialize it with the required arguments and call the method `write`:
 ```python
 with open("users.csv", "w") as f:
     w = DataclassWriter(f, users, User)
-    w.writer()
+    w.write()
 ```
 
 That's it! Let's break down the snippet above.
@@ -386,7 +386,7 @@ depending on your use case it makes sense to change it. The `DataclassWriter` ha
     w.map("firstname").to("First name")
     w.map("lastname").to("Last name")
 
-    w.writer()
+    w.write()
  ```
 
  The CSV output of the snippet above will be:
