@@ -36,7 +36,7 @@ class UserWithAcceptWhiteSpacesDecorator:
 
 @dataclasses.dataclass
 class UserWithAcceptWhiteSpacesMetadata:
-    name: str = dataclasses.field(metadata={'accept_whitespaces': True})
+    name: str = dataclasses.field(metadata={"accept_whitespaces": True})
 
 
 @dataclasses.dataclass
@@ -45,7 +45,7 @@ class UserWithoutDateFormatDecorator:
     create_date: datetime
 
 
-@dateformat('%Y-%m-%d')
+@dateformat("%Y-%m-%d")
 @dataclasses.dataclass
 class UserWithDateFormatDecorator:
     name: str
@@ -55,19 +55,15 @@ class UserWithDateFormatDecorator:
 @dataclasses.dataclass
 class UserWithDateFormatMetadata:
     name: str
-    create_date: datetime = dataclasses.field(
-        metadata={'dateformat': '%Y-%m-%d'}
-    )
+    create_date: datetime = dataclasses.field(metadata={"dateformat": "%Y-%m-%d"})
 
 
-@dateformat('%Y-%m-%d')
+@dateformat("%Y-%m-%d")
 @dataclasses.dataclass
 class UserWithDateFormatDecoratorAndMetadata:
     name: str
     birthday: datetime
-    create_date: datetime = dataclasses.field(
-        metadata={'dateformat': '%Y-%m-%d %H:%M'}
-    )
+    create_date: datetime = dataclasses.field(metadata={"dateformat": "%Y-%m-%d %H:%M"})
 
 
 @dataclasses.dataclass
@@ -93,10 +89,12 @@ class UserWithInitFalseAndDefaultValue:
     lastname: str
     age: int = dataclasses.field(init=False, default=0)
 
+
 @dataclasses.dataclass
 class UserWithOptionalAge:
     name: str
     age: Optional[int]
+
 
 @dataclasses.dataclass
 class UserWithDefaultDatetimeField:
@@ -124,4 +122,3 @@ class UserWithSSN:
 class UserWithEmail:
     name: str
     email: str
-

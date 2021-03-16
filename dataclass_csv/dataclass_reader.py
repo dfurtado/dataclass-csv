@@ -84,10 +84,10 @@ class DataclassReader:
             if field.name in self._optional_fields:
                 return self._get_default_value(field)
             else:
-                keyerror_message = f"The value for the column `{field.name}` is missing in the CSV file."
+                keyerror_message = f"The value for the column `{field.name}`"
                 if is_field_mapped:
-                    keyerror_message = f"The value for the mapped column `{key}` is missing in the CSV file"
-                raise KeyError(keyerror_message)
+                    keyerror_message = f"The value for the mapped column `{key}`"
+                raise KeyError(f"{keyerror_message} is missing in the CSV file")
         else:
             if not value and field.name in self._optional_fields:
                 return self._get_default_value(field)
@@ -159,7 +159,9 @@ class DataclassReader:
                 or "__origin__" in field_type.__dict__
                 and field_type.__origin__ is Union
             ):
-                real_types = [t for t in field_type.__args__ if t is not type(None)]
+                real_types = [
+                    t for t in field_type.__args__ if t is not type(None)  # noqa: E721
+                ]
                 if len(real_types) == 1:
                     field_type = real_types[0]
 
