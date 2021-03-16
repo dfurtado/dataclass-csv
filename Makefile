@@ -52,7 +52,7 @@ clean-test: ## remove test and coverage artifacts
 
 lint: ## check style with mypy and flake8
 	mypy dataclass_csv tests
-	flake8 dataclass-csv tests
+	flake8 dataclass_csv tests
 
 test: ## run tests quickly with the default Python
 	py.test
