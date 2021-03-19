@@ -1,5 +1,4 @@
 import pytest
-import dataclasses
 
 from dataclass_csv import DataclassWriter, DataclassReader
 
@@ -41,7 +40,7 @@ def test_with_a_non_dataclass(tmpdir_factory):
 
     with tempfile.open("w") as f:
         with pytest.raises(ValueError):
-            w = DataclassWriter(f, users, NonDataclassUser)
+            DataclassWriter(f, users, NonDataclassUser)
 
 
 def test_with_a_empty_cls_value(tmpdir_factory):
@@ -51,16 +50,16 @@ def test_with_a_empty_cls_value(tmpdir_factory):
 
     with tempfile.open("w") as f:
         with pytest.raises(ValueError):
-            w = DataclassWriter(f, users, None)
+            DataclassWriter(f, users, None)
 
 
 def test_invalid_file_value(tmpdir_factory):
-    tempfile = tmpdir_factory.mktemp("data").join("user_001.csv")
+    tmpdir_factory.mktemp("data").join("user_001.csv")
 
     users = [User(name="test", age=40)]
 
     with pytest.raises(ValueError):
-        w = DataclassWriter(None, users, User)
+        DataclassWriter(None, users, User)
 
 
 def test_with_data_not_a_list(tmpdir_factory):
@@ -70,5 +69,4 @@ def test_with_data_not_a_list(tmpdir_factory):
 
     with tempfile.open("w") as f:
         with pytest.raises(ValueError):
-            w = DataclassWriter(f, users, User)
-
+            DataclassWriter(f, users, User)

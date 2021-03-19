@@ -19,7 +19,7 @@ from .mocks import (
 
 
 def test_reader_with_non_dataclass(create_csv):
-    csv_file = create_csv({'name': 'User1', 'age': 40})
+    csv_file = create_csv({"name": "User1", "age": 40})
 
     class DummyUser:
         pass
@@ -30,7 +30,7 @@ def test_reader_with_non_dataclass(create_csv):
 
 
 def test_reader_with_none_class(create_csv):
-    csv_file = create_csv({'name': 'User1', 'age': 40})
+    csv_file = create_csv({"name": "User1", "age": 40})
 
     with csv_file.open() as f:
         with pytest.raises(ValueError):
@@ -43,7 +43,7 @@ def test_reader_with_none_file():
 
 
 def test_reader_with_correct_values(create_csv):
-    csv_file = create_csv({'name': 'User', 'age': 40})
+    csv_file = create_csv({"name": "User", "age": 40})
 
     with csv_file.open() as f:
         reader = DataclassReader(f, User)
@@ -51,9 +51,7 @@ def test_reader_with_correct_values(create_csv):
 
 
 def test_reader_values(create_csv):
-    csv_file = create_csv(
-        [{'name': 'User1', 'age': 40}, {'name': 'User2', 'age': 30}]
-    )
+    csv_file = create_csv([{"name": "User1", "age": 40}, {"name": "User2", "age": 30}])
 
     with csv_file.open() as f:
         reader = DataclassReader(f, User)
@@ -66,15 +64,15 @@ def test_reader_values(create_csv):
 
         user1, user2 = items[0], items[1]
 
-        assert user1.name == 'User1'
+        assert user1.name == "User1"
         assert user1.age == 40
 
-        assert user2.name == 'User2'
+        assert user2.name == "User2"
         assert user2.age == 30
 
 
 def test_csv_header_items_with_spaces(create_csv):
-    csv_file = create_csv({'  name': 'User1', 'age   ': 40})
+    csv_file = create_csv({"  name": "User1", "age   ": 40})
 
     with csv_file.open() as f:
         reader = DataclassReader(f, User)
@@ -84,12 +82,12 @@ def test_csv_header_items_with_spaces(create_csv):
 
         user = items[0]
 
-        assert user.name == 'User1'
+        assert user.name == "User1"
         assert user.age == 40
 
 
 def test_csv_header_items_with_spaces_together_with_skipinitialspaces(create_csv):
-    csv_file = create_csv({'  name': 'User1', 'age   ': 40})
+    csv_file = create_csv({"  name": "User1", "age   ": 40})
 
     with csv_file.open() as f:
         reader = DataclassReader(f, User, skipinitialspace=True)
@@ -99,13 +97,13 @@ def test_csv_header_items_with_spaces_together_with_skipinitialspaces(create_csv
 
         user = items[0]
 
-        assert user.name == 'User1'
+        assert user.name == "User1"
         assert user.age == 40
 
 
 def test_parse_bool_value_true(create_csv):
-    for true_value in ['yes', 'true', 't', 'y', '1']:
-        csv_file = create_csv({'boolValue': f'{true_value}'})
+    for true_value in ["yes", "true", "t", "y", "1"]:
+        csv_file = create_csv({"boolValue": f"{true_value}"})
         with csv_file.open() as f:
             reader = DataclassReader(f, DataclassWithBooleanValue)
             items = list(reader)
@@ -114,8 +112,8 @@ def test_parse_bool_value_true(create_csv):
 
 
 def test_parse_bool_value_false(create_csv):
-    for false_value in ['no', 'false', 'f', 'n', '0']:
-        csv_file = create_csv({'boolValue': f'{false_value}'})
+    for false_value in ["no", "false", "f", "n", "0"]:
+        csv_file = create_csv({"boolValue": f"{false_value}"})
         with csv_file.open() as f:
             reader = DataclassReader(f, DataclassWithBooleanValue)
             items = list(reader)
@@ -124,7 +122,7 @@ def test_parse_bool_value_false(create_csv):
 
 
 def test_parse_bool_value_invalid(create_csv):
-    csv_file = create_csv({'boolValue': 'notValidBoolean'})
+    csv_file = create_csv({"boolValue": "notValidBoolean"})
     with csv_file.open() as f:
         with pytest.raises(CsvValueError):
             reader = DataclassReader(f, DataclassWithBooleanValue)
@@ -132,7 +130,7 @@ def test_parse_bool_value_invalid(create_csv):
 
 
 def test_parse_bool_value_none_default(create_csv):
-    csv_file = create_csv({'boolValue': ''})
+    csv_file = create_csv({"boolValue": ""})
     with csv_file.open() as f:
         reader = DataclassReader(f, DataclassWithBooleanValueNoneDefault)
         items = list(reader)
@@ -141,24 +139,24 @@ def test_parse_bool_value_none_default(create_csv):
 
 
 def test_skip_dataclass_field_when_init_is_false(create_csv):
-    csv_file = create_csv({'firstname': 'User1', 'lastname': 'TestUser'})
+    csv_file = create_csv({"firstname": "User1", "lastname": "TestUser"})
     with csv_file.open() as f:
         reader = DataclassReader(f, UserWithInitFalse)
-        items = list(reader)
+        list(reader)
 
 
 def test_try_to_access_not_initialized_prop_raise_attr_error(create_csv):
-    csv_file = create_csv({'firstname': 'User1', 'lastname': 'TestUser'})
+    csv_file = create_csv({"firstname": "User1", "lastname": "TestUser"})
     with csv_file.open() as f:
         reader = DataclassReader(f, UserWithInitFalse)
         items = list(reader)
         with pytest.raises(AttributeError):
             user = items[0]
-            user_age = user.age
+            assert user.age is not None
 
 
 def test_try_to_access_not_initialized_prop_with_default_value(create_csv):
-    csv_file = create_csv({'firstname': 'User1', 'lastname': 'TestUser'})
+    csv_file = create_csv({"firstname": "User1", "lastname": "TestUser"})
     with csv_file.open() as f:
         reader = DataclassReader(f, UserWithInitFalseAndDefaultValue)
         items = list(reader)
@@ -167,14 +165,15 @@ def test_try_to_access_not_initialized_prop_with_default_value(create_csv):
 
 
 def test_reader_with_optional_types(create_csv):
-    csv_file = create_csv({'name': 'User', 'age': 40})
+    csv_file = create_csv({"name": "User", "age": 40})
 
     with csv_file.open() as f:
         reader = DataclassReader(f, UserWithOptionalAge)
         list(reader)
 
+
 def test_reader_with_datetime_default_value(create_csv):
-    csv_file = create_csv({'name': 'User', 'birthday': ''})
+    csv_file = create_csv({"name": "User", "birthday": ""})
 
     with csv_file.open() as f:
         reader = DataclassReader(f, UserWithDefaultDatetimeField)
@@ -184,10 +183,12 @@ def test_reader_with_datetime_default_value(create_csv):
 
 
 def test_should_parse_user_defined_types(create_csv):
-    csv_file = create_csv([
-        {'name': 'User1', 'ssn': '123-45-6789'},
-        {'name': 'User1', 'ssn': '123456789'},
-    ])
+    csv_file = create_csv(
+        [
+            {"name": "User1", "ssn": "123-45-6789"},
+            {"name": "User1", "ssn": "123456789"},
+        ]
+    )
 
     with csv_file.open() as f:
         reader = DataclassReader(f, UserWithSSN)
@@ -195,27 +196,32 @@ def test_should_parse_user_defined_types(create_csv):
         assert len(items) == 2
 
         assert isinstance(items[0].ssn, SSN)
-        assert items[0].ssn.val == '123-45-6789'
+        assert items[0].ssn.val == "123-45-6789"
 
         assert isinstance(items[1].ssn, SSN)
-        assert items[1].ssn.val == '123-45-6789'
+        assert items[1].ssn.val == "123-45-6789"
 
 
 def test_raise_error_when_mapped_column_not_found(create_csv):
-    csv_file = create_csv({'name': 'User1', 'e-mail': 'test@test.com'})
+    csv_file = create_csv({"name": "User1", "e-mail": "test@test.com"})
 
     with csv_file.open() as f:
-        with pytest.raises(KeyError, match='The value for the mapped column `e_mail` is missing in the CSV file'):
+        with pytest.raises(
+            KeyError,
+            match="The value for the mapped column `e_mail` is missing in the CSV file",
+        ):
             reader = DataclassReader(f, UserWithEmail)
-            reader.map('e_mail').to('email')
+            reader.map("e_mail").to("email")
             list(reader)
 
 
 def test_raise_error_when_field_not_found(create_csv):
-    csv_file = create_csv({'name': 'User1', 'e-mail': 'test@test.com'})
+    csv_file = create_csv({"name": "User1", "e-mail": "test@test.com"})
 
     with csv_file.open() as f:
-        with pytest.raises(KeyError, match='The value for the column `email` is missing in the CSV file.'):
+        with pytest.raises(
+            KeyError,
+            match="The value for the column `email` is missing in the CSV file.",
+        ):
             reader = DataclassReader(f, UserWithEmail)
             list(reader)
-

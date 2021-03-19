@@ -9,4 +9,4 @@ class CsvValueError(Exception):
         self.line_number: int = line_number
 
     def __str__(self):
-        return f'{self.error} [CSV Line number: {self.line_number}]'
+        return f"{self.error} [CSV Line number: {self.line_number}]"

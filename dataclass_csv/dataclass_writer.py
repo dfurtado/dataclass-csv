@@ -1,6 +1,6 @@
 import csv
 import dataclasses
-from typing import Type, Dict, Any, List, Iterable
+from typing import Type, Dict, Any, List
 from .header_mapper import HeaderMapper
 
 
@@ -53,8 +53,9 @@ class DataclassWriter:
             if not isinstance(item, self._cls):
                 raise TypeError(
                     (
-                        f"The item [{item}] is not an instance of {self._cls.__name__}. "
-                        "All items on the list must be instances of the same type"
+                        f"The item [{item}] is not an instance of "
+                        f"{self._cls.__name__}. All items on the list must be "
+                        "instances of the same type"
                     )
                 )
             row = dataclasses.astuple(item)
@@ -64,6 +65,4 @@ class DataclassWriter:
         """Used to map a field in the dataclass to header item in the CSV file
         :param propname: The name of the property of the dataclass to be mapped
         """
-        return HeaderMapper(
-            lambda header: self._add_to_mapping(header, propname)
-        )
+        return HeaderMapper(lambda header: self._add_to_mapping(header, propname))
