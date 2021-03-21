@@ -8,6 +8,26 @@ from typing import Union, Type, Optional, Sequence, Dict, Any, List
 from .field_mapper import FieldMapper
 from .exceptions import CsvValueError
 
+from collections import Counter
+
+
+def _verify_duplicate_header_items(header):
+    if header is not None and len(header) == 0:
+        return
+
+    header_counter = Counter(header)
+    duplicated = [k for k, v in header_counter.items() if v > 1]
+
+    if len(duplicated) > 0:
+        raise ValueError(
+            (
+                "It seems like the CSV file contain duplicated header "
+                f"values: {duplicated}. This may cause inconsistent data. "
+                "Use the kwarg validate_header=False when initializing the "
+                "DataclassReader to skip the header validation."
+            )
+        )
+
 
 class DataclassReader:
     def __init__(
@@ -32,9 +52,14 @@ class DataclassReader:
         self._optional_fields = self._get_optional_fields()
         self._field_mapping: Dict[str, Dict[str, Any]] = {}
 
+        validate_header = kwds.pop("validate_header", True)
+
         self._reader = csv.DictReader(
             f, fieldnames, restkey, restval, dialect, *args, **kwds
         )
+
+        if validate_header:
+            _verify_duplicate_header_items(self._reader.fieldnames)
 
     def _get_optional_fields(self):
         return [
