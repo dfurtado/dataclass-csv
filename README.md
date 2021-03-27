@@ -85,6 +85,16 @@ dataclass_csv.DataclassReader(
 )
 ```
 
+All keyword arguments support by `DictReader` are supported by the `DataclassReader`, with the addition of:
+
+`validate_header` - The `DataclassReader` will raise a `ValueError` if the CSV file cointain columns with the same name. This
+validation is performed to avoid data being overwritten. To skip this validation set `validate_header=False` when creating a
+instance of the `DataclassReader`, see an example below:
+
+```python
+reader = DataclassReader(f, User, validate_header=False)
+```
+
 If you run this code you should see an output like this:
 
 ```python

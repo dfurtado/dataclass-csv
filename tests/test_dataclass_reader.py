@@ -225,3 +225,26 @@ def test_raise_error_when_field_not_found(create_csv):
         ):
             reader = DataclassReader(f, UserWithEmail)
             list(reader)
+
+
+def test_raise_error_when_duplicate_header_items(create_csv):
+    csv_file = create_csv(
+        {"name": "User1", "email": "test@test.com"},
+        fieldnames=["name", "email", "name"],
+    )
+
+    with csv_file.open() as f:
+        with pytest.raises(ValueError):
+            reader = DataclassReader(f, UserWithEmail)
+            list(reader)
+
+
+def test_skip_header_validation(create_csv):
+    csv_file = create_csv(
+        {"name": "User1", "email": "test@test.com"},
+        fieldnames=["name", "email", "name"],
+    )
+
+    with csv_file.open() as f:
+        reader = DataclassReader(f, UserWithEmail, validate_header=False)
+        list(reader)
