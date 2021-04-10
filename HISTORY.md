@@ -67,3 +67,11 @@
 * Added type hinting to external API
 * Documentation updates
 * Bug fixes
+
+## 1.3.0 (2021-04-10)
+
+* Included stub files
+* check if the CSV file has duplicated header values
+* Fixed issues #22 and #33
+* code cleanup
+
