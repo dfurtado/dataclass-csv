@@ -5,6 +5,8 @@ from datetime import datetime
 from distutils.util import strtobool
 from typing import Union, Type, Optional, Sequence, Dict, Any, List
 
+import typing
+
 from .field_mapper import FieldMapper
 from .exceptions import CsvValueError
 
@@ -27,6 +29,20 @@ def _verify_duplicate_header_items(header):
                 "DataclassReader to skip the header validation."
             )
         )
+
+
+def is_union_type(t):
+    if hasattr(t, "__origin__") and t.__origin__ is Union:
+        return True
+
+    return False
+
+
+def get_args(t):
+    if hasattr(t, "__args__"):
+        return t.__args__
+
+    return tuple()
 
 
 class DataclassReader:
@@ -60,6 +76,8 @@ class DataclassReader:
 
         if validate_header:
             _verify_duplicate_header_items(self._reader.fieldnames)
+
+        self.type_hints = typing.get_type_hints(cls)
 
     def _get_optional_fields(self):
         return [
@@ -175,20 +193,12 @@ class DataclassReader:
                 values.append(None)
                 continue
 
-            field_type = field.type
-            # Special handling for Optional (Union of a single real type and None)
-            if (
-                # The first part of the condition is for Python < 3.8
-                type(field_type).__name__ == "_Union"
-                # The second part of the condition is for Python >= 3.8
-                or "__origin__" in field_type.__dict__
-                and field_type.__origin__ is Union
-            ):
-                real_types = [
-                    t for t in field_type.__args__ if t is not type(None)  # noqa: E721
-                ]
-                if len(real_types) == 1:
-                    field_type = real_types[0]
+            field_type = self.type_hints[field.name]
+
+            if is_union_type(field_type):
+                type_args = [x for x in get_args(field_type) if x is not type(None)]
+                if len(type_args) == 1:
+                    field_type = type_args[0]
 
             if field_type is datetime:
                 try:
