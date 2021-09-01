@@ -1,7 +1,7 @@
 import dataclasses
 import csv
 
-from datetime import datetime
+from datetime import date, datetime
 from distutils.util import strtobool
 from typing import Union, Type, Optional, Sequence, Dict, Any, List
 
@@ -157,7 +157,7 @@ class DataclassReader:
             else:
                 return value
 
-    def _parse_date_value(self, field, date_value):
+    def _parse_date_value(self, field, date_value, field_type):
         dateformat = self._get_metadata_option(field, "dateformat")
 
         if not isinstance(date_value, str):
@@ -175,7 +175,13 @@ class DataclassReader:
                     "{'dateformat': <date_format>})`."
                 )
             )
-        return datetime.strptime(date_value, dateformat)
+
+        datetime_obj = datetime.strptime(date_value, dateformat)
+
+        if field_type == date:
+            return datetime_obj.date()
+        else:
+            return datetime_obj
 
     def _process_row(self, row):
         values = []
@@ -200,9 +206,9 @@ class DataclassReader:
                 if len(type_args) == 1:
                     field_type = type_args[0]
 
-            if field_type is datetime:
+            if field_type is datetime or field_type is date:
                 try:
-                    transformed_value = self._parse_date_value(field, value)
+                    transformed_value = self._parse_date_value(field, value, field_type)
                 except ValueError as ex:
                     raise CsvValueError(ex, line_number=self._reader.line_num) from None
                 else:
