@@ -54,8 +54,8 @@ class DataclassReader:
         restkey: Optional[str] = None,
         restval: Optional[Any] = None,
         dialect: str = "excel",
-        *args: List[Any],
-        **kwds: Dict[str, Any],
+        *args: Any,
+        **kwds: Any,
     ):
 
         if not f:
