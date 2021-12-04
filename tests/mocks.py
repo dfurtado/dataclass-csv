@@ -122,3 +122,9 @@ class UserWithSSN:
 class UserWithEmail:
     name: str
     email: str
+
+
+@dataclasses.dataclass
+class UserWithOptionalEmail:
+    name: str
+    email: str = "not specified"
