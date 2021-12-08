@@ -178,7 +178,7 @@ class DataclassReader:
         return datetime.strptime(date_value, dateformat)
 
     def _process_row(self, row):
-        values = []
+        values = dict()
 
         for field in dataclasses.fields(self._cls):
             if not field.init:
@@ -190,7 +190,7 @@ class DataclassReader:
                 raise CsvValueError(ex, line_number=self._reader.line_num) from None
 
             if not value and field.default is None:
-                values.append(None)
+                values[field.name] = None
                 continue
 
             field_type = self.type_hints[field.name]
@@ -206,7 +206,7 @@ class DataclassReader:
                 except ValueError as ex:
                     raise CsvValueError(ex, line_number=self._reader.line_num) from None
                 else:
-                    values.append(transformed_value)
+                    values[field.name] = transformed_value
                     continue
 
             if field_type is bool:
@@ -219,7 +219,7 @@ class DataclassReader:
                 except ValueError as ex:
                     raise CsvValueError(ex, line_number=self._reader.line_num) from None
                 else:
-                    values.append(transformed_value)
+                    values[field.name] = transformed_value
                     continue
 
             try:
@@ -233,8 +233,8 @@ class DataclassReader:
                     line_number=self._reader.line_num,
                 ) from e
             else:
-                values.append(transformed_value)
-        return self._cls(*values)
+                values[field.name] = transformed_value
+        return self._cls(**values)
 
     def __next__(self):
         row = next(self._reader)

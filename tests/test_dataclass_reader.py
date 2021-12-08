@@ -15,6 +15,7 @@ from .mocks import (
     UserWithSSN,
     SSN,
     UserWithEmail,
+    UserWithOptionalEmail,
 )
 
 
@@ -247,4 +248,37 @@ def test_skip_header_validation(create_csv):
 
     with csv_file.open() as f:
         reader = DataclassReader(f, UserWithEmail, validate_header=False)
+        list(reader)
+
+
+def test_dt_different_order_as_csv(create_csv):
+    csv_file = create_csv(
+        {"email": "test@test.com", "name": "User1"},
+        fieldnames=[
+            "email",
+            "name",
+        ],
+    )
+
+    with csv_file.open() as f:
+        reader = DataclassReader(f, UserWithEmail)
+        list(reader)
+
+
+def test_dt_different_order_as_csv_and_option_field(create_csv):
+    data = [
+        {"email": "test@test.com", "name": "User1"},
+        {"name": "User1"},
+    ]
+
+    csv_file = create_csv(
+        data,
+        fieldnames=[
+            "email",
+            "name",
+        ],
+    )
+
+    with csv_file.open() as f:
+        reader = DataclassReader(f, UserWithOptionalEmail)
         list(reader)
