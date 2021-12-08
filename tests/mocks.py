@@ -1,7 +1,7 @@
 import dataclasses
 import re
 
-from datetime import datetime
+from datetime import date, datetime
 
 from dataclass_csv import dateformat, accept_whitespaces
 
@@ -50,6 +50,13 @@ class UserWithoutDateFormatDecorator:
 class UserWithDateFormatDecorator:
     name: str
     create_date: datetime
+
+
+@dateformat("%Y-%m-%d")
+@dataclasses.dataclass
+class UserWithDateFormatDecoratorAndDateField:
+    name: str
+    create_date: date
 
 
 @dataclasses.dataclass
