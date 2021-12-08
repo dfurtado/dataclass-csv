@@ -1,6 +1,5 @@
-from .exceptions import CsvValueError as CsvValueError
 from .field_mapper import FieldMapper as FieldMapper
-from typing import Any, Dict, List, Optional, Sequence, Type
+from typing import Any, Optional, Sequence, Type
 
 class DataclassReader:
     def __init__(
@@ -11,9 +10,9 @@ class DataclassReader:
         restkey: Optional[str] = ...,
         restval: Optional[Any] = ...,
         dialect: str = ...,
-        *args: List[Any],
-        **kwds: Dict[str, Any],
+        *args: Any,
+        **kwds: Any
     ) -> None: ...
-    def __next__(self): ...
+    def __next__(self) -> None: ...
     def __iter__(self) -> Any: ...
     def map(self, csv_fieldname: str) -> FieldMapper: ...
