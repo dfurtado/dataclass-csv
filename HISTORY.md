@@ -75,3 +75,7 @@
 * Fixed issues #22 and #33
 * code cleanup
 
+## 1.4.0 (2021-12-13)
+
+* Bug fixes
+* Support for date types
