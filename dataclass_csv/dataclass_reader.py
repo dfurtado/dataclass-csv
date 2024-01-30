@@ -14,6 +14,7 @@ from collections import Counter
 
 T = TypeVar("T")
 
+
 def _verify_duplicate_header_items(header):
     if header is not None and len(header) == 0:
         return
