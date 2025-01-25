@@ -2,6 +2,7 @@
 
 ## Development Lead
 
+* Kraktus
 * Daniel Furtado <daniel@dfurtado.com>
 
 ## Contributors
