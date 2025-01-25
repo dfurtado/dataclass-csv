@@ -11,7 +11,7 @@ class DataclassWriter:
         data: List[Any],
         cls: Type[object],
         dialect: str = "excel",
-        **fmtparams: Dict[str, Any],
+        **fmtparams: Any,
     ):
         if not f:
             raise ValueError("The f argument is required")
