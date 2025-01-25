@@ -2,7 +2,6 @@ import dataclasses
 import csv
 
 from datetime import date, datetime
-from distutils.util import strtobool
 from typing import Union, Type, Optional, Sequence, Dict, Any, List
 
 import typing
@@ -30,6 +29,22 @@ def _verify_duplicate_header_items(header):
             )
         )
 
+# Identical to the one found in `distutils.util`
+# taken from https://github.com/pypa/distutils/blob/ff11eed0c36b35bd68615a8ebf36763b7c8a6f28/distutils/util.py#L321
+def strtobool(val: str) -> bool:
+    """Convert a string representation of truth to true (1) or false (0).
+
+    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
+    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
+    'val' is anything else.
+    """
+    val = val.lower()
+    if val in ('y', 'yes', 't', 'true', 'on', '1'):
+        return True
+    elif val in ('n', 'no', 'f', 'false', 'off', '0'):
+        return False
+    else:
+        raise ValueError(f"invalid truth value {val!r}")
 
 def is_union_type(t):
     if hasattr(t, "__origin__") and t.__origin__ is Union:
