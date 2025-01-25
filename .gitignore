@@ -18,4 +18,4 @@ dist
 .vscode
 gmon.out
 .vim
-pyproject.toml
+.aider*

@@ -1,19 +1,16 @@
-[dependency-groups]
-dev = [
-    "pyright>=1.1.392.post0",
-    "pytest>=8.3.4",
-]
 [project]
-name = "dataclass-csv"
-version = "1.4.0"
+name = "dataclass-csv2"
+version = "0.1.0"
 description = "Map CSV data into dataclasses"
+readme = "README.md"
+license = "BSD-3-Clause"
+requires-python = ">=3.7"
+dependencies = []
 authors = [
+    # TODO, check if only active maintainer should be set
+    {name = "Kraktus", email = "kraktus@users.noreply.github.com"},
     {name = "Daniel Furtado", email = "daniel@dfurtado.com"},
 ]
-dependencies = []
-requires-python = ">=3.7"
-readme = "README.md"
-license = {text = "BSD license"}
 keywords = ["dataclass", "dataclasses", "csv", "dataclass-csv"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -29,19 +26,13 @@ classifiers = [
     "Environment :: Console",
 ]
 
+
 [project.urls]
-Homepage = "https://github.com/dfurtado/dataclass-csv"
+Homepage = "https://github.com/kraktus/dataclass-csv2"
+"Issue Tracker" = "https://github.com/kraktus/dataclass-csv2/issues"
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build]
-include = [
-    "dataclass_csv/**/*.py",
-    "dataclass_csv/**/*.pyi",
-    "dataclass_csv/py.typed",
+[dependency-groups]
+dev = [
+    "pyright>=1.1.392.post0",
+    "pytest>=7.4.4",
 ]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
