@@ -36,3 +36,10 @@ dev = [
     "pyright>=1.1.392.post0",
     "pytest>=7.4.4",
 ]
+
+
+# pyproject.toml
+[tool.pytest.ini_options]
+testpaths = [
+    "tests"
+]
