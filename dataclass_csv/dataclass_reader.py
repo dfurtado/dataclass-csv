@@ -66,7 +66,7 @@ class DataclassReader(Generic[T]):
     def __init__(
         self,
         f: Any,
-        cls: Type[T],
+        klass: Type[T],
         fieldnames: Optional[Sequence[str]] = None,
         restkey: Optional[str] = None,
         restval: Optional[Any] = None,
@@ -78,10 +78,10 @@ class DataclassReader(Generic[T]):
         if not f:
             raise ValueError("The f argument is required.")
 
-        if cls is None or not dataclasses.is_dataclass(cls):
-            raise ValueError("cls argument needs to be a dataclass.")
+        if klass is None or not dataclasses.is_dataclass(klass):
+            raise ValueError("klass argument needs to be a dataclass.")
 
-        self._cls = cls
+        self._cls = klass
         self._optional_fields = self._get_optional_fields()
         self._field_mapping: Dict[str, Dict[str, Any]] = {}
 
@@ -94,7 +94,7 @@ class DataclassReader(Generic[T]):
         if validate_header:
             _verify_duplicate_header_items(self._reader.fieldnames)
 
-        self.type_hints = typing.get_type_hints(cls)
+        self.type_hints = typing.get_type_hints(klass)
 
     def _get_optional_fields(self):
         return [

@@ -9,7 +9,7 @@ class DataclassWriter:
         self,
         f: Any,
         data: List[Any],
-        cls: Type[object],
+        klass: Type[object],
         dialect: str = "excel",
         **fmtparams: Any,
     ):
@@ -19,14 +19,14 @@ class DataclassWriter:
         if not isinstance(data, list):
             raise ValueError("Invalid 'data' argument. It must be a list")
 
-        if not dataclasses.is_dataclass(cls):
-            raise ValueError("Invalid 'cls' argument. It must be a dataclass")
+        if not dataclasses.is_dataclass(klass):
+            raise ValueError("Invalid 'klass' argument. It must be a dataclass")
 
         self._data = data
-        self._cls = cls
+        self._cls = klass
         self._field_mapping: Dict[str, str] = dict()
 
-        self._fieldnames = [x.name for x in dataclasses.fields(cls)]
+        self._fieldnames = [x.name for x in dataclasses.fields(klass)]
 
         self._writer = csv.writer(f, dialect=dialect, **fmtparams)
 

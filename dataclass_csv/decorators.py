@@ -23,9 +23,9 @@ def dateformat(date_format: str) -> Callable[[F], F]:
     if not date_format or not isinstance(date_format, str):
         raise ValueError("Invalid value for the date_format argument")
 
-    def func(cls):
-        cls.__dateformat__ = date_format
-        return cls
+    def func(klass):
+        klass.__dateformat__ = date_format
+        return klass
 
     return func
 
@@ -47,9 +47,9 @@ def accept_whitespaces(_cls: Type[Any] = None) -> Callable[[F], F]:
         >>>     brithday: datetime
     """
 
-    def func(cls):
-        cls.__accept_whitespaces__ = True
-        return cls
+    def func(klass):
+        klass.__accept_whitespaces__ = True
+        return klass
 
     if _cls:
         return func(_cls)
