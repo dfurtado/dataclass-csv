@@ -4,9 +4,9 @@
 
 
 
-# Dataclass CSV
+# Dataclass CSV 2
 
-Dataclass CSV makes working with CSV files easier and much better than working with Dicts. It uses Python's Dataclasses to store data of every row on the CSV file and also uses type annotations which enables proper type checking and validation.
+Dataclass CSV 2 is a fork of [dataclass-csv](https://github.com/dfurtado/dataclass-csv) with downstream bug fixes that makes working with CSV files easier and much better than working with Dicts. It uses Python's Dataclasses to store data of every row on the CSV file and also uses type annotations which enables proper type checking and validation.
 
 
 ## Main features
@@ -26,7 +26,7 @@ using a list of instances of a dataclass.
 ## Installation
 
 ```shell
-pipenv install dataclass-csv
+pip install dataclass-csv2
 ```
 
 ## Getting started
