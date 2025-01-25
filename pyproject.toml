@@ -11,3 +11,45 @@ dev = [
     "pyright>=1.1.392.post0",
     "pytest>=8.3.4",
 ]
+[project]
+name = "dataclass-csv"
+version = "1.4.0"
+description = "Map CSV data into dataclasses"
+authors = [
+    {name = "Daniel Furtado", email = "daniel@dfurtado.com"},
+]
+dependencies = []
+requires-python = ">=3.7"
+readme = "README.md"
+license = {text = "BSD license"}
+keywords = ["dataclass", "dataclasses", "csv", "dataclass-csv"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers", 
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS :: MacOS X", 
+    "Operating System :: Unix",
+    "Operating System :: POSIX",
+    "Environment :: Console",
+]
+
+[project.urls]
+Homepage = "https://github.com/dfurtado/dataclass-csv"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = [
+    "dataclass_csv/**/*.py",
+    "dataclass_csv/**/*.pyi",
+    "dataclass_csv/py.typed",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
