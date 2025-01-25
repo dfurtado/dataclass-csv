@@ -1,6 +1,0 @@
-from typing import Any, Callable, Type, TypeVar
-
-F = TypeVar("F", bound=Callable[..., Any])
-
-def dateformat(date_format: str) -> Callable[[F], F]: ...
-def accept_whitespaces(_cls: Type[Any] = ...) -> Callable[[F], F]: ...
