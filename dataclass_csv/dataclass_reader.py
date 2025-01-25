@@ -237,7 +237,7 @@ class DataclassReader(Generic[T]):
                     transformed_value = (
                         value
                         if isinstance(value, bool)
-                        else strtobool(str(value).strip()) == 1
+                        else strtobool(str(value).strip())
                     )
                 except ValueError as ex:
                     raise CsvValueError(ex, line_number=self._reader.line_num) from None
