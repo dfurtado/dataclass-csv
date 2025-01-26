@@ -126,53 +126,52 @@ class DataclassReader(Generic[T]):
     def _get_value(self, row, field):
         is_field_mapped = False
 
-        try:
-            if field.name in self._field_mapping.keys():
-                is_field_mapped = True
-                key = self._field_mapping.get(field.name)
-            else:
-                key = field.name
+        if field.name in self._field_mapping.keys():
+            is_field_mapped = True
+            key = self._field_mapping.get(field.name)
+        else:
+            key = field.name
 
-            if key in row.keys():
-                value = row[key]
-            else:
+        if key in row.keys():
+            value = row[key]
+        else:
+            try:
                 possible_key = self._get_possible_keys(field.name, row)
                 key = possible_key if possible_key else key
                 value = row[key]
-
-        except KeyError:
-            if field.name in self._optional_fields:
-                return self._get_default_value(field)
-            else:
-                keyerror_message = f"The value for the column `{field.name}`"
-                if is_field_mapped:
-                    keyerror_message = f"The value for the mapped column `{key}`"
-                raise KeyError(f"{keyerror_message} is missing in the CSV file")
-        else:
-            if not value and field.name in self._optional_fields:
-                return self._get_default_value(field)
-            elif not value and field.name not in self._optional_fields:
-                raise ValueError(f"The field `{field.name}` is required.")
-            elif (
-                value
-                and field.type is str
-                and not len(value.strip())
-                and not self._get_metadata_option(field, "accept_whitespaces")
-            ):
-                raise ValueError(
-                    (
-                        f"It seems like the value of `{field.name}` contains "
-                        "only white spaces. To allow white spaces to all "
-                        "string fields, use the @accept_whitespaces "
-                        "decorator. "
-                        "To allow white spaces specifically for the field "
-                        f"`{field.name}` change its definition to: "
-                        f"`{field.name}: str = field(metadata="
-                        "{'accept_whitespaces': True})`."
-                    )
+            except KeyError:
+                if field.name in self._optional_fields:
+                    return self._get_default_value(field)
+                else:
+                    keyerror_message = f"The value for the column `{field.name}`"
+                    if is_field_mapped:
+                        keyerror_message = f"The value for the mapped column `{key}`"
+                    raise KeyError(f"{keyerror_message} is missing in the CSV file")
+        
+        if not value and field.name in self._optional_fields:
+            return self._get_default_value(field)
+        elif not value and field.name not in self._optional_fields:
+            raise ValueError(f"The field `{field.name}` is required.")
+        elif (
+            value
+            and field.type is str
+            and not len(value.strip())
+            and not self._get_metadata_option(field, "accept_whitespaces")
+        ):
+            raise ValueError(
+                (
+                    f"It seems like the value of `{field.name}` contains "
+                    "only white spaces. To allow white spaces to all "
+                    "string fields, use the @accept_whitespaces "
+                    "decorator. "
+                    "To allow white spaces specifically for the field "
+                    f"`{field.name}` change its definition to: "
+                    f"`{field.name}: str = field(metadata="
+                    "{'accept_whitespaces': True})`."
                 )
-            else:
-                return value
+            )
+        else:
+            return value
 
     def _parse_date_value(self, field, date_value, field_type):
         dateformat = self._get_metadata_option(field, "dateformat")
