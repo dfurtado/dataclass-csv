@@ -3,7 +3,7 @@ name = "dataclass-csv2"
 version = "0.1.0"
 description = "Map CSV data into dataclasses"
 readme = "README.md"
-license = "BSD-3-Clause"
+license-expression = "BSD-3-Clause"
 requires-python = ">=3.7"
 dependencies = []
 authors = [
