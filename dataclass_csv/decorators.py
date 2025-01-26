@@ -31,7 +31,7 @@ def dateformat(date_format: str) -> Callable[[F], F]:
 
 KLASS = TypeVar("KLASS", bound=Type[Any])
 
-def accept_whitespaces(klass: KLASS) -> Callable[[KLASS], KLASS]:
+def accept_whitespaces(klass: KLASS) -> KLASS:
     """The accept_whitespaces decorator tells the `DataclassReader`
     that `str` fields defined in the `dataclass` should accept
     values containing only white spaces.
