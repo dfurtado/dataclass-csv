@@ -1,11 +1,12 @@
 from csv import DictWriter
+from typing import Any, Dict, List, Union
 
 import pytest
 
 
 @pytest.fixture()
 def create_csv(tmpdir_factory):
-    def func(data, fieldnames=None, filename="user.csv", factory=tmpdir_factory):
+    def func(data: Union[Dict[str, Any], List[Dict[str, Any]]], fieldnames=None, filename="user.csv", factory=tmpdir_factory):
 
         assert data
 
@@ -18,8 +19,10 @@ def create_csv(tmpdir_factory):
         with file.open("w") as f:
             writer = DictWriter(f, fieldnames=header)
             writer.writeheader()
-            addrow = writer.writerows if isinstance(data, list) else writer.writerow
-            addrow(data)
+            if isinstance(data, list):
+                writer.writerows(data)
+            else:
+                writer.writerow(data)
 
         return file
 

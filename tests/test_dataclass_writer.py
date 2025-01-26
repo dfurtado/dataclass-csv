@@ -50,7 +50,7 @@ def test_with_a_empty_cls_value(tmpdir_factory):
 
     with tempfile.open("w") as f:
         with pytest.raises(ValueError):
-            DataclassWriter(f, users, None)
+            DataclassWriter(f, users, None) # type: ignore
 
 
 def test_invalid_file_value(tmpdir_factory):
