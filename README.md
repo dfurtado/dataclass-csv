@@ -1,6 +1,5 @@
-[![Build Status](https://travis-ci.org/dfurtado/dataclass-csv.svg?branch=master)](https://travis-ci.org/dfurtado/dataclass-csv)
-[![pypi](https://img.shields.io/pypi/v/dataclass-csv.svg)](https://pypi.python.org/pypi/dataclass-csv)
-[![Downloads](https://pepy.tech/badge/dataclass-csv)](https://pepy.tech/project/dataclass-csv)
+[![pypi](https://img.shields.io/pypi/v/dataclass-csv2.svg)](https://pypi.python.org/pypi/dataclass-csv2)
+[![Downloads](https://pepy.tech/badge/dataclass-csv2)](https://pepy.tech/project/dataclass-csv2)
 
 
 
