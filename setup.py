@@ -13,14 +13,6 @@ with open("HISTORY.md") as history_file:
 
 requirements = []
 
-setup_requirements = [
-    "pytest-runner",
-]
-
-test_requirements = [
-    "pytest",
-]
-
 setup(
     author="Daniel Furtado",
     author_email="daniel@dfurtado.com",
@@ -47,9 +39,7 @@ setup(
     name="dataclass-csv",
     packages=find_packages(include=["dataclass_csv"]),
     package_data={"dataclass_csv": ["py.typed", "*.pyi"]},
-    setup_requires=setup_requirements,
     test_suite="tests",
-    tests_require=test_requirements,
     url="https://github.com/dfurtado/dataclass-csv",
     version="1.4.0",
     zip_safe=False,
