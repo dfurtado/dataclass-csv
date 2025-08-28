@@ -2,7 +2,6 @@ import dataclasses
 import csv
 
 from datetime import date, datetime
-from distutils.util import strtobool
 from typing import Union, Type, Optional, Sequence, Dict, Any, List
 
 import typing
@@ -29,6 +28,23 @@ def _verify_duplicate_header_items(header):
                 "DataclassReader to skip the header validation."
             )
         )
+
+
+# this is a port from distutils.util.strtobool
+def _strtobool(val: str) -> bool:
+    """Convert a string representation of truth to true (1) or false (0).
+
+    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
+    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
+    'val' is anything else.
+    """
+    val = val.lower()
+    if val in ('y', 'yes', 't', 'true', 'on', '1'):
+        return True
+    elif val in ('n', 'no', 'f', 'false', 'off', '0'):
+        return False
+    else:
+        raise ValueError(f"invalid truth value {val!r}")
 
 
 def is_union_type(t):
@@ -220,7 +236,7 @@ class DataclassReader:
                     transformed_value = (
                         value
                         if isinstance(value, bool)
-                        else strtobool(str(value).strip()) == 1
+                        else _strtobool(str(value).strip()) == 1
                     )
                 except ValueError as ex:
                     raise CsvValueError(ex, line_number=self._reader.line_num) from None
