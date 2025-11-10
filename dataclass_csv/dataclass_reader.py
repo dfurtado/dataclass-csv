@@ -3,7 +3,7 @@ import csv
 
 from datetime import date, datetime
 from distutils.util import strtobool
-from typing import Union, Type, Optional, Sequence, Dict, Any, List
+from typing import Union, Type, Optional, Sequence, Dict, Any, List, Generic, TypeVar
 
 import typing
 
@@ -11,6 +11,8 @@ from .field_mapper import FieldMapper
 from .exceptions import CsvValueError
 
 from collections import Counter
+
+T = TypeVar("T")
 
 
 def _verify_duplicate_header_items(header):
@@ -45,11 +47,11 @@ def get_args(t):
     return tuple()
 
 
-class DataclassReader:
+class DataclassReader(Generic[T]):
     def __init__(
         self,
         f: Any,
-        cls: Type[object],
+        cls: Type[T],
         fieldnames: Optional[Sequence[str]] = None,
         restkey: Optional[str] = None,
         restval: Optional[Any] = None,
@@ -183,7 +185,7 @@ class DataclassReader:
         else:
             return datetime_obj
 
-    def _process_row(self, row):
+    def _process_row(self, row) -> T:
         values = dict()
 
         for field in dataclasses.fields(self._cls):
@@ -242,7 +244,7 @@ class DataclassReader:
                 values[field.name] = transformed_value
         return self._cls(**values)
 
-    def __next__(self):
+    def __next__(self) -> T:
         row = next(self._reader)
         return self._process_row(row)
 
