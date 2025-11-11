@@ -2,8 +2,7 @@ import dataclasses
 import csv
 
 from datetime import date, datetime
-from distutils.util import strtobool
-from typing import Union, Type, Optional, Sequence, Dict, Any, List
+from typing import Union, Type, Optional, Sequence, Dict, Any
 
 import typing
 
@@ -11,6 +10,16 @@ from .field_mapper import FieldMapper
 from .exceptions import CsvValueError
 
 from collections import Counter
+
+def strtobool(value: str) -> bool:
+    trueValues = ["true", "yes", "t", "y", "on", "1"]
+
+    validValues =  ["false", "no", "f", "n", "off", "0", *trueValues]
+
+    if value.lower() not in validValues:
+        raise ValueError(f"invalid boolean value {value}")
+
+    return value.lower() in trueValues
 
 
 def _verify_duplicate_header_items(header):
