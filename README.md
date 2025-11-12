@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dfurtado/dataclass-csv.svg?branch=master)](https://travis-ci.org/dfurtado/dataclass-csv)
+[![Unit testing](https://github.com/dfurtado/dataclass-csv/actions/workflows/unit-test.yml/badge.svg)](https://github.com/dfurtado/dataclass-csv/actions/workflows/unit-test.yml)
 [![pypi](https://img.shields.io/pypi/v/dataclass-csv.svg)](https://pypi.python.org/pypi/dataclass-csv)
 [![Downloads](https://pepy.tech/badge/dataclass-csv)](https://pepy.tech/project/dataclass-csv)
 
