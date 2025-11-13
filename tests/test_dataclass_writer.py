@@ -62,7 +62,7 @@ def test_invalid_file_value(tmpdir_factory):
         DataclassWriter(None, users, User)
 
 
-def test_with_data_not_a_list(tmpdir_factory):
+def test_with_data_not_an_iterable(tmpdir_factory):
     tempfile = tmpdir_factory.mktemp("data").join("user_001.csv")
 
     users = User(name="test", age=40)
