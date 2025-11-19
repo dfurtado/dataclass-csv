@@ -11,6 +11,18 @@ from .exceptions import CsvValueError
 
 from collections import Counter
 
+T = TypeVar("T")
+
+def strtobool(value: str) -> bool:
+    trueValues = ["true", "yes", "t", "y", "on", "1"]
+
+    validValues =  ["false", "no", "f", "n", "off", "0", *trueValues]
+
+    if value.lower() not in validValues:
+        raise ValueError(f"invalid boolean value {value}")
+
+    return value.lower() in trueValues
+
 
 T = TypeVar("T")
 
