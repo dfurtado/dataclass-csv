@@ -1,14 +1,12 @@
 [project]
-name = "dataclass-csv2"
-version = "0.1.0"
+name = "dataclass-csv"
+version = "1.4.0"
 description = "Map CSV data into dataclasses"
 readme = "README.md"
 license-expression = "BSD-3-Clause"
 requires-python = ">=3.7"
 dependencies = []
 authors = [
-    # TODO, check if only active maintainer should be set
-    {name = "Kraktus", email = "kraktus@users.noreply.github.com"},
     {name = "Daniel Furtado", email = "daniel@dfurtado.com"},
 ]
 keywords = ["dataclass", "dataclasses", "csv", "dataclass-csv"]
@@ -34,8 +32,8 @@ classifiers = [
 
 
 [project.urls]
-Homepage = "https://github.com/kraktus/dataclass-csv2"
-"Issue Tracker" = "https://github.com/kraktus/dataclass-csv2/issues"
+Homepage = "https://github.com/dfurtado/dataclass-csv"
+"Issue Tracker" = "https://github.com/dfurtado/dataclass-csv/issues"
 
 [dependency-groups]
 dev = [
