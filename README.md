@@ -23,6 +23,11 @@ Dataclass CSV makes working with CSV files easier and much better than working w
 using a list of instances of a dataclass.
 
 
+## Thanks
+
+Thank you to all the amazing contributors who have supported this project over the years, with special thanks to [@kraktus](https://github.com/kraktus) for setting up GitHub Actions, improving automation for package creation, and making numerous code enhancements.
+
+
 ## Installation
 
 ```shell
