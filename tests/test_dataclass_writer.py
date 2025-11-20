@@ -50,7 +50,7 @@ def test_with_a_empty_cls_value(tmpdir_factory):
 
     with tempfile.open("w") as f:
         with pytest.raises(ValueError):
-            DataclassWriter(f, users, None)
+            DataclassWriter(f, users, None) # type: ignore
 
 
 def test_invalid_file_value(tmpdir_factory):
@@ -61,12 +61,16 @@ def test_invalid_file_value(tmpdir_factory):
     with pytest.raises(ValueError):
         DataclassWriter(None, users, User)
 
-
-def test_with_data_not_a_list(tmpdir_factory):
+def test_with_iterable(tmpdir_factory):
     tempfile = tmpdir_factory.mktemp("data").join("user_001.csv")
-
-    users = User(name="test", age=40)
+    users_dict = {"test": User(name="test", age=40)}
 
     with tempfile.open("w") as f:
-        with pytest.raises(ValueError):
-            DataclassWriter(f, users, User)
+        DataclassWriter(f, users_dict.values(), User).write()
+
+    with tempfile.open() as f:
+        reader = DataclassReader(f, User)
+        saved_users = list(reader)
+
+        assert len(saved_users) > 0
+        assert saved_users[0].name == users_dict["test"].name

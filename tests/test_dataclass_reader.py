@@ -36,7 +36,7 @@ def test_reader_with_none_class(create_csv):
 
     with csv_file.open() as f:
         with pytest.raises(ValueError):
-            DataclassReader(f, None)
+            DataclassReader(f, None) # type: ignore
 
 
 def test_reader_with_none_file():

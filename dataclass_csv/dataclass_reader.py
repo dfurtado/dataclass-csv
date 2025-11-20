@@ -24,6 +24,8 @@ def strtobool(value: str) -> bool:
     return value.lower() in trueValues
 
 
+T = TypeVar("T")
+
 def _verify_duplicate_header_items(header):
     if header is not None and len(header) == 0:
         return
@@ -40,6 +42,17 @@ def _verify_duplicate_header_items(header):
                 "DataclassReader to skip the header validation."
             )
         )
+
+
+def strtobool(value: str) -> bool:
+    trueValues = ["true", "yes", "t", "y", "on", "1"]
+
+    validValues =  ["false", "no", "f", "n", "off", "0", *trueValues]
+
+    if value.lower() not in validValues:
+        raise ValueError(f"invalid boolean value {value}")
+
+    return value.lower() in trueValues
 
 
 def is_union_type(t):
@@ -60,7 +73,7 @@ class DataclassReader(Generic[T]):
     def __init__(
         self,
         f: Any,
-        cls: Type[T],
+        klass: Type[T],
         fieldnames: Optional[Sequence[str]] = None,
         restkey: Optional[str] = None,
         restval: Optional[Any] = None,
@@ -72,10 +85,10 @@ class DataclassReader(Generic[T]):
         if not f:
             raise ValueError("The f argument is required.")
 
-        if cls is None or not dataclasses.is_dataclass(cls):
-            raise ValueError("cls argument needs to be a dataclass.")
+        if klass is None or not dataclasses.is_dataclass(klass):
+            raise ValueError("klass argument needs to be a dataclass.")
 
-        self._cls = cls
+        self._cls = klass
         self._optional_fields = self._get_optional_fields()
         self._field_mapping: Dict[str, Dict[str, Any]] = {}
 
@@ -88,7 +101,7 @@ class DataclassReader(Generic[T]):
         if validate_header:
             _verify_duplicate_header_items(self._reader.fieldnames)
 
-        self.type_hints = typing.get_type_hints(cls)
+        self.type_hints = typing.get_type_hints(klass)
 
     def _get_optional_fields(self):
         return [
@@ -120,53 +133,52 @@ class DataclassReader(Generic[T]):
     def _get_value(self, row, field):
         is_field_mapped = False
 
-        try:
-            if field.name in self._field_mapping.keys():
-                is_field_mapped = True
-                key = self._field_mapping.get(field.name)
-            else:
-                key = field.name
+        if field.name in self._field_mapping.keys():
+            is_field_mapped = True
+            key = self._field_mapping.get(field.name)
+        else:
+            key = field.name
 
-            if key in row.keys():
-                value = row[key]
-            else:
+        if key in row.keys():
+            value = row[key]
+        else:
+            try:
                 possible_key = self._get_possible_keys(field.name, row)
                 key = possible_key if possible_key else key
                 value = row[key]
-
-        except KeyError:
-            if field.name in self._optional_fields:
-                return self._get_default_value(field)
-            else:
-                keyerror_message = f"The value for the column `{field.name}`"
-                if is_field_mapped:
-                    keyerror_message = f"The value for the mapped column `{key}`"
-                raise KeyError(f"{keyerror_message} is missing in the CSV file")
-        else:
-            if not value and field.name in self._optional_fields:
-                return self._get_default_value(field)
-            elif not value and field.name not in self._optional_fields:
-                raise ValueError(f"The field `{field.name}` is required.")
-            elif (
-                value
-                and field.type is str
-                and not len(value.strip())
-                and not self._get_metadata_option(field, "accept_whitespaces")
-            ):
-                raise ValueError(
-                    (
-                        f"It seems like the value of `{field.name}` contains "
-                        "only white spaces. To allow white spaces to all "
-                        "string fields, use the @accept_whitespaces "
-                        "decorator. "
-                        "To allow white spaces specifically for the field "
-                        f"`{field.name}` change its definition to: "
-                        f"`{field.name}: str = field(metadata="
-                        "{'accept_whitespaces': True})`."
-                    )
+            except KeyError:
+                if field.name in self._optional_fields:
+                    return self._get_default_value(field)
+                else:
+                    keyerror_message = f"The value for the column `{field.name}`"
+                    if is_field_mapped:
+                        keyerror_message = f"The value for the mapped column `{key}`"
+                    raise KeyError(f"{keyerror_message} is missing in the CSV file")
+        
+        if not value and field.name in self._optional_fields:
+            return self._get_default_value(field)
+        elif not value and field.name not in self._optional_fields:
+            raise ValueError(f"The field `{field.name}` is required.")
+        elif (
+            value
+            and field.type is str
+            and not len(value.strip())
+            and not self._get_metadata_option(field, "accept_whitespaces")
+        ):
+            raise ValueError(
+                (
+                    f"It seems like the value of `{field.name}` contains "
+                    "only white spaces. To allow white spaces to all "
+                    "string fields, use the @accept_whitespaces "
+                    "decorator. "
+                    "To allow white spaces specifically for the field "
+                    f"`{field.name}` change its definition to: "
+                    f"`{field.name}: str = field(metadata="
+                    "{'accept_whitespaces': True})`."
                 )
-            else:
-                return value
+            )
+        else:
+            return value
 
     def _parse_date_value(self, field, date_value, field_type):
         dateformat = self._get_metadata_option(field, "dateformat")
@@ -231,7 +243,7 @@ class DataclassReader(Generic[T]):
                     transformed_value = (
                         value
                         if isinstance(value, bool)
-                        else strtobool(str(value).strip()) == 1
+                        else strtobool(str(value).strip())
                     )
                 except ValueError as ex:
                     raise CsvValueError(ex, line_number=self._reader.line_num) from None

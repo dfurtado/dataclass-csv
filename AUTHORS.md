@@ -2,10 +2,11 @@
 
 ## Development Lead
 
-* Daniel Furtado <daniel@dfurtado.com>
+* Daniel Furtado
 
 ## Contributors
 
+* Kraktus
 * Nick Schober
 * Zoltan Ivanfi
 * Alec Benzer

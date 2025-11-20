@@ -1,32 +1,33 @@
 import csv
 import dataclasses
-from typing import Type, Dict, Any, List
+from typing import Type, Dict, Any, List, Iterable, Generic, TypeVar
 from .header_mapper import HeaderMapper
 
 
-class DataclassWriter:
+
+T = TypeVar("T")
+
+
+class DataclassWriter(Generic[T]):
     def __init__(
         self,
         f: Any,
-        data: List[Any],
-        cls: Type[object],
+        data: Iterable[T],
+        klass: Type[T],
         dialect: str = "excel",
-        **fmtparams: Dict[str, Any],
+        **fmtparams: Any,
     ):
         if not f:
             raise ValueError("The f argument is required")
 
-        if not isinstance(data, list):
-            raise ValueError("Invalid 'data' argument. It must be a list")
-
-        if not dataclasses.is_dataclass(cls):
-            raise ValueError("Invalid 'cls' argument. It must be a dataclass")
+        if not dataclasses.is_dataclass(klass):
+            raise ValueError("Invalid 'klass' argument. It must be a dataclass")
 
         self._data = data
-        self._cls = cls
+        self._cls = klass
         self._field_mapping: Dict[str, str] = dict()
 
-        self._fieldnames = [x.name for x in dataclasses.fields(cls)]
+        self._fieldnames = [x.name for x in dataclasses.fields(klass)]
 
         self._writer = csv.writer(f, dialect=dialect, **fmtparams)
 
@@ -48,7 +49,6 @@ class DataclassWriter:
                 self._fieldnames = self._apply_mapping()
 
             self._writer.writerow(self._fieldnames)
-
         for item in self._data:
             if not isinstance(item, self._cls):
                 raise TypeError(

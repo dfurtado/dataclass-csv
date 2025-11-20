@@ -23,14 +23,15 @@ def dateformat(date_format: str) -> Callable[[F], F]:
     if not date_format or not isinstance(date_format, str):
         raise ValueError("Invalid value for the date_format argument")
 
-    def func(cls):
-        cls.__dateformat__ = date_format
-        return cls
+    def func(klass):
+        klass.__dateformat__ = date_format
+        return klass
 
     return func
 
+KLASS = TypeVar("KLASS", bound=Type[Any])
 
-def accept_whitespaces(_cls: Type[Any] = None) -> Callable[[F], F]:
+def accept_whitespaces(klass: KLASS) -> KLASS:
     """The accept_whitespaces decorator tells the `DataclassReader`
     that `str` fields defined in the `dataclass` should accept
     values containing only white spaces.
@@ -47,11 +48,5 @@ def accept_whitespaces(_cls: Type[Any] = None) -> Callable[[F], F]:
         >>>     brithday: datetime
     """
 
-    def func(cls):
-        cls.__accept_whitespaces__ = True
-        return cls
-
-    if _cls:
-        return func(_cls)
-
-    return func
+    klass.__accept_whitespaces__ = True
+    return klass
