@@ -3,40 +3,63 @@
 [![Downloads](https://pepy.tech/badge/dataclass-csv)](https://pepy.tech/project/dataclass-csv)
 
 
-
 # Dataclass CSV
 
-Dataclass CSV makes working with CSV files easier and much better than working with Dicts. It uses Python's Dataclasses to store data of every row on the CSV file and also uses type annotations which enables proper type checking and validation.
+Dataclass CSV makes working with CSV files simpler and more reliable than using dictionaries. It leverages Python’s dataclasses to represent each row in a CSV file, while also supporting type annotations for proper type checking and validation.
 
+## ✨ Key Features
 
-## Main features
+**Dataclasses instead of dictionaries**
 
-- Use `dataclasses` instead of dictionaries to represent the rows in the CSV file.
-- Take advantage of the `dataclass` properties type annotation. `DataclassReader` use the type annotation to perform validation of the data of the CSV file.
-- Automatic type conversion. `DataclassReader` supports `str`, `int`, `float`, `complex`, `datetime` and `bool`, as well as any type whose constructor accepts a string as its single argument.
-- Helps you troubleshoot issues with the data in the CSV file. `DataclassReader` will show exactly in which line of the CSV file contain errors.
-- Extract only the data you need. It will only parse the properties defined in the `dataclass`
-- Familiar syntax. The `DataclassReader` is used almost the same way as the `DictReader` in the standard library.
-- It uses `dataclass` features that let you define metadata properties so the data can be parsed exactly the way you want.
-- Make the code cleaner. No more extra loops to convert data to the correct type, perform validation, set default values, the `DataclassReader` will do all this for you.
-- In additon of the `DataclassReader` the library also provides a `DataclassWriter` which enables creating a CSV file
-using a list of instances of a dataclass.
+Represent CSV rows as dataclass instances for cleaner, more structured code.
+
+**Type-aware validation**
+
+DataclassReader uses type annotations to validate CSV data automatically.
+
+**Automatic type conversion**
+
+Supports str, int, float, complex, datetime, and bool, as well as any type whose constructor accepts a single string argument.
+
+**Detailed error reporting**
+
+Pinpoints exactly which line in the CSV contains invalid data, making troubleshooting easier.
+
+**Selective parsing**
+
+Only extracts the fields defined in your dataclass, so you get exactly the data you need.
+
+**Familiar syntax**
+
+Works much like Python’s built-in csv.DictReader, so it feels natural to use.
+
+**Metadata support**
+
+Leverages dataclass metadata to customize how data is parsed.
+
+**Cleaner code**
+
+Eliminates the need for manual loops to convert types, validate data, or set default values—DataclassReader handles it all.
+
+**CSV writing support**
+
+In addition to reading, the library provides a DataclassWriter for creating CSV files from lists of dataclass instances.
 
 
 ## Thanks
 
-Thank you to all the amazing contributors who have supported this project over the years, with special thanks to [@kraktus](https://github.com/kraktus) for setting up GitHub Actions, improving automation for package creation, and making numerous code enhancements.
+A heartfelt thank you to all the incredible contributors who have supported this project over the years. Special thanks go to [@kraktus](https://github.com/kraktus) for setting up GitHub Actions, enhancing automation for package creation, and delivering numerous code improvements.
 
 
 ## Installation
 
 ```shell
-pipenv install dataclass-csv
+pip install dataclass-csv
 ```
 
 ## Getting started
 
-## Using the DataclassReader
+### Using the DataclassReader
 
 First, add the necessary imports:
 
@@ -63,10 +86,9 @@ class User:
     email: str
     age: int
 ```
+The dataclass `User` has three properties: `firstname` and `email`, both of type `str`, and `age`, of type `int`.
 
-The dataclass `User` has 3 properties, `firstname` and `email` is of type `str` and `age` is of type `int`.
-
-To load and read the contents of the CSV file we do the same thing as if we would be using the `DictReader` from the `csv` module in the Python's standard library. After opening the file we create an instance of the `DataclassReader` passing two arguments. The first is the `file` and the second is the dataclass that we wish to use to represent the data of every row of the CSV file. Like so:
+To load and read the contents of a CSV file, you follow the same approach as when using DictReader from Python’s standard csv module. After opening the file, you create an instance of `DataclassReader`, passing two arguments: the file object and the dataclass you want to use to represent each row of the CSV. For example:
 
 ```python
 with open(filename) as users_csv:
@@ -75,7 +97,8 @@ with open(filename) as users_csv:
         print(row)
 ```
 
-The `DataclassReader` internally uses the `DictReader` from the `csv` module to read the CSV file which means that you can pass the same arguments that you would pass to the `DictReader`. The complete argument list is shown below:
+Internally, `DataclassReader` relies on Python’s `csv.DictReader` to read CSV files. This means you can pass the same arguments that you would normally provide to `DictReader`. The full list of supported arguments is shown below:
+
 
 ```python
 dataclass_csv.DataclassReader(
@@ -90,17 +113,17 @@ dataclass_csv.DataclassReader(
 )
 ```
 
-All keyword arguments support by `DictReader` are supported by the `DataclassReader`, with the addition of:
+All keyword arguments supported by DictReader are also supported by DataclassReader, with one additional option:
 
-`validate_header` - The `DataclassReader` will raise a `ValueError` if the CSV file cointain columns with the same name. This
-validation is performed to avoid data being overwritten. To skip this validation set `validate_header=False` when creating a
-instance of the `DataclassReader`, see an example below:
+`validate_header` — When enabled, `DataclassReader` will raise a ValueError if the CSV file contains duplicate column names. This validation helps prevent data from being overwritten. To disable this check, set `validate_header=False` when creating a `DataclassReader` instance. For example:
+
 
 ```python
 reader = DataclassReader(f, User, validate_header=False)
 ```
 
-If you run this code you should see an output like this:
+Executing the code produces the following output:
+
 
 ```python
 User(firstname='Elsa', email='elsa@test.com', age=11)
@@ -111,22 +134,23 @@ User(firstname='Ella', email='ella@test.com', age=2)
 
 ### Error handling
 
-One of the advantages of using the `DataclassReader` is that it makes it easy to detect when the type of data in the CSV file is not what your application's model is expecting. And, the `DataclassReader` shows errors that will help to identify the rows with problem in your CSV file.
+One of the key advantages of using `DataclassReader` is its ability to detect when the data types in a CSV file don’t match what your application’s model expects. In such cases, `DataclassReader` provides clear error messages that help you identify exactly which rows contain problematic values.
 
-For example, say we change the contents of the CSV file shown in the **Getting started** section and, modify the `age` of the user Astor, let's change it to a string value:
+For example, if we modify the CSV file from the **Getting Started** section and change the age of the user Astor to a string value, the error will highlight this mismatch:
 
 ```text
 Astor, astor@test.com, test
 ```
+Remember that in the User dataclass, the `age` property is annotated as an `int`. If we run the code again, an exception will be raised with the following message:
 
-Remember that in the dataclass `User` the `age` property is annotated with `int`. If we run the code again an exception will be raised with the message below:
 
 ```text
 dataclass_csv.exceptions.CsvValueError: The field `age` is defined as <class 'int'> but
 received a value of type <class 'str'>. [CSV Line number: 3]
 ```
 
-Note that apart from telling what the error was, the `DataclassReader` will also show which line of the CSV file contain the data with errors.
+Note that, in addition to describing the error, `DataclassReader` also indicates which line of the CSV file contains the problematic data.
+
 
 ### Default values
 
