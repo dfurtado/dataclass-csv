@@ -154,7 +154,7 @@ Note that, in addition to describing the error, `DataclassReader` also indicates
 
 ### Default values
 
-The `DataclassReader` also handles properties with default values. Let's modify the dataclass `User` and add a default value for the field `email`:
+`DataclassReader` can process dataclass fields that define default values. As an example, we’ll modify the User dataclass to assign a default value to the `email` field:
 
 ```python
 from dataclasses import dataclass
@@ -166,14 +166,12 @@ class User:
     email: str = 'Not specified'
     age: int
 ```
-
-And we modify the CSV file and remove the email for the user Astor:
+We then update the CSV file, removing the email value for the user Astor:
 
 ```python
 Astor,, 7
 ```
-
-If we run the code we should see the output below:
+When you run the code, the output will appear as follows:
 
 ```text
 User(firstname='Elsa', email='elsa@test.com', age=11)
@@ -181,10 +179,9 @@ User(firstname='Astor', email='Not specified', age=7)
 User(firstname='Edit', email='edit@test.com', age=3)
 User(firstname='Ella', email='ella@test.com', age=2)
 ```
+Note that the User object for Astor now has the default value `Not specified` assigned to the email property.
 
-Note that now the object for the user Astor have the default value `Not specified` assigned to the email property.
-
-Default values can also be set using `dataclasses.field` like so:
+Default values can also be defined using `dataclasses.field`, as shown below:
 
 ```python
 from dataclasses import dataclass, field
