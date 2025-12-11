@@ -196,16 +196,18 @@ class User:
 
 ### Mapping dataclass fields to columns
 
-The mapping between a dataclass property and a column in the CSV file will be done automatically if the names match, however, there are situations that the name of the header for a column is different. We can easily tell the `DataclassReader` how the mapping should be done using the method `map`. Assuming that we have a CSV file with the contents below:
+By default, `DataclassReader` automatically maps dataclass properties to CSV columns when their names match. However, there are cases where a column header in the CSV file uses a different name. In such situations, you can explicitly define the mapping using the map method.
+
+For example, consider the following CSV file:
 
 ```text
 First Name,email,age
 Elsa,elsa@test.com, 11
 ```
 
-Note that now, the column is called **First Name** and not **firstname**
+Notice that the column header is now **First Name** instead of **firstname**.
 
-And we can use the method `map`, like so:
+To handle this difference, we can use the map method as follows:
 
 ```python
 reader = DataclassReader(users_csv, User)
@@ -214,9 +216,14 @@ reader.map('First name').to('firstname')
 
 Now the DataclassReader will know how to extract the data from the column **First Name** and add it to the to dataclass property **firstname**
 
+Now, `DataclassReader` will correctly extract the data from the **First Name** column 
+and assign it to the **firstname** property in the dataclass.
+
 ### Supported type annotation
 
-At the moment the `DataclassReader` support `int`, `str`, `float`, `complex`, `datetime`, and `bool`. When defining a `datetime` property, it is necessary to use the `dateformat` decorator, for example:
+Currently, `DataclassReader` supports the following types: `int`, `str`, `float`, `complex`, `datetime`, and `bool`.
+
+When working with a datetime property, you must use the `dateformat` decorator to specify how the date should be parsed. For example:
 
 ```python
 from dataclasses import dataclass
