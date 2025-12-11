@@ -263,18 +263,20 @@ User(name='Edit', email='edit@test.com', birthday=datetime.datetime(2018, 11, 23
 
 ### Fields metadata
 
-It is important to note that the `dateformat` decorator will define the date format that will be used to parse date to all properties
-in the class. Now there are situations where the data in a CSV file contains two or more columns with date values in different formats. It is possible
-to set a format specific for every property using the `dataclasses.field`. Let's say that we now have a CSV file with the following contents:
+It’s important to note that the dateformat decorator defines the date format used to parse all datetime properties in a dataclass.
+
+However, CSV files may sometimes contain multiple date columns with different formats. In these cases, you can assign a format specific to each property by using dataclasses.field.
+
+For example, consider the following CSV file:
+
 
 ```text
 name,email,birthday, create_date
 Edit,edit@test.com,2018/11/23,2018/11/23 10:43
 ```
+As you can see, the `create_date` column includes time information.
 
-As you can see the `create_date` contains time information as well.
-
-The `dataclass` User can be defined like this:
+The `User` dataclass can be defined as follows:
 
 ```python
 from dataclasses import dataclass, field
@@ -292,16 +294,14 @@ class User:
     create_date: datetime = field(metadata={'dateformat': '%Y/%m/%d %H:%M'})
 ```
 
-Note that the format for the `birthday` field was not speficied using the `field` metadata. In this case the format specified in the `dateformat`
-decorator will be used.
+Notice that the `birthday` field does not have a format specified through field metadata. In this case, the format defined in the `dateformat` decorator will be applied.
 
 ### Handling values with empty spaces
 
-When defining a property of type `str` in the `dataclass`, the `DataclassReader` will treat values with only white spaces as invalid. To change this
-behavior, there is a decorator called `@accept_whitespaces`. When decorating the class with the `@accept_whitespaces` all the properties in the class
-will accept values with only white spaces.
+When defining a property of type `str` in a dataclass, `DataclassReader` treats values that contain only whitespace as invalid.
 
-For example:
+To change this behavior, you can use the `@accept_whitespaces` decorator. When applied to the class, this decorator allows whitespace-only values to be accepted as valid input. For example:
+
 
 ```python
 from dataclass_csv import DataclassReader, accept_whitespaces
@@ -315,7 +315,7 @@ class User:
     created_at: datetime
 ```
 
-If you need a specific field to accept white spaces, you can set the property `accept_whitespaces` in the field's metadata, like so:
+If you need a specific field to accept white spaces, you can set the property `accept_whitespaces` in the field's metadata:
 
 ```python
 @dataclass
