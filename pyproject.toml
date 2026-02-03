@@ -1,6 +1,6 @@
 [project]
 name = "dataclass-csv"
-version = "1.5.0"
+version = "1.4.1"
 description = "Map CSV data into dataclasses"
 readme = "README.md"
 license-expression = "BSD-3-Clause"
