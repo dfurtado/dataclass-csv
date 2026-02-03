@@ -55,6 +55,3 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["dataclass_csv"]
-
-[tool.hatch.build.targets.wheel.force-include]
-"dataclass_csv/py.typed" = "dataclass_csv/py.typed"
