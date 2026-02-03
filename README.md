@@ -9,41 +9,32 @@ Dataclass CSV makes working with CSV files simpler and more reliable than using 
 
 ## ✨ Key Features
 
-**Dataclasses instead of dictionaries**
-
+### 📦 Dataclasses instead of dictionaries  
 Represent CSV rows as dataclass instances for cleaner, more structured code.
 
-**Type-aware validation**
+### 🔍 Type‑aware validation  
+`DataclassReader` uses type annotations to validate CSV data automatically.
 
-DataclassReader uses type annotations to validate CSV data automatically.
+### 🔄 Automatic type conversion  
+Supports `str`, `int`, `float`, `complex`, `datetime`, and `bool`, plus any type whose constructor accepts a single string argument.
 
-**Automatic type conversion**
-
-Supports str, int, float, complex, datetime, and bool, as well as any type whose constructor accepts a single string argument.
-
-**Detailed error reporting**
-
+### 🧭 Detailed error reporting  
 Pinpoints exactly which line in the CSV contains invalid data, making troubleshooting easier.
 
-**Selective parsing**
-
+### 🎯 Selective parsing  
 Only extracts the fields defined in your dataclass, so you get exactly the data you need.
 
-**Familiar syntax**
+### 🧩 Familiar syntax  
+Works much like Python’s built‑in `csv.DictReader`, so it feels natural to use.
 
-Works much like Python’s built-in csv.DictReader, so it feels natural to use.
-
-**Metadata support**
-
+### 🏷️ Metadata support  
 Leverages dataclass metadata to customize how data is parsed.
 
-**Cleaner code**
+### 🧼 Cleaner code  
+Eliminates the need for manual loops to convert types, validate data, or set default values—`DataclassReader` handles it all.
 
-Eliminates the need for manual loops to convert types, validate data, or set default values—DataclassReader handles it all.
-
-**CSV writing support**
-
-In addition to reading, the library provides a DataclassWriter for creating CSV files from lists of dataclass instances.
+### ✍️ CSV writing support  
+Alongside reading, the library provides `DataclassWriter` for generating CSV files from lists of dataclass instances.
 
 
 ## Thanks
