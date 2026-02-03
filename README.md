@@ -350,9 +350,9 @@ class User:
 
 ## Using the DataclassWriter
 
-Reading a CSV file using the `DataclassReader` is great and gives us the type-safety of Python's dataclasses and type annotation, however, there are situations where we would like to use dataclasses for creating CSV files, that's where the `DataclassWriter` comes in handy.
+Reading CSV files with `DataclassReader` gives you the full benefit of Python’s type‑safety through dataclasses and type annotations. But sometimes we need to go in the opposite direction—using dataclasses to produce CSV output. That’s exactly where `DataclassWriter` shines.
 
-Using the `DataclassWriter` is quite simple. Given that we have a dataclass `User`:
+Using `DataclassWriter` is straightforward. Suppose we have a simple User dataclass:
 
 ```python
 from dataclasses import dataclass
@@ -375,8 +375,7 @@ users = [
     User(firstname="Ella", "Fralla", age=4)
 ]
 ```
-
-In order to create a CSV using the `DataclassWriter` import it from `dataclass_csv`:
+To generate a CSV file with `DataclassWriter`, start by importing it from `dataclass_csv`:
 
 ```python
 from dataclass_csv import DataclassWriter
@@ -390,15 +389,13 @@ with open("users.csv", "w") as f:
     w.write()
 ```
 
-That's it! Let's break down the snippet above.
+That’s it! Let’s break down what’s happening in the example above.
 
-First, we open a file called `user.csv` for writing. After that, an instance of the `DataclassWriter` is created. To create a `DataclassWriter` we need to pass the `file`, the list of `User` instances, and lastly, the type, which in this case is `User`.
+We start by opening a file named user.csv in write mode. Then we create a `DataclassWriter` instance. To initialize a writer, we provide three things: the file object, the list of `User` instances, and the dataclass type itself (`User`).
 
-The type is required since the writer uses it when trying to figure out the CSV header. By default, it will use the names of the
-properties defined in the dataclass, in the case of the dataclass `User` the title of each column
-will be `firstname`, `lastname` and `age`.
+The type is required because the writer uses it to determine the CSV header. By default, it takes the field names defined in the dataclass. For our `User` example, the resulting column titles are `firstname`, `lastname`, and `age`.
 
-See below the CSV created out of a list of `User`:
+Here’s the CSV generated from the list of `User` objects:
 
 ```text
 firstname,lastname,age
@@ -406,20 +403,15 @@ John,Smith,40
 Daniel,Nilsson,10
 Ella,Fralla,4
 ```
+`DataclassWriter` also accepts `**fmtparams`, which are passed directly to Python’s built‑in `csv.writer`. You can use this to customize delimiter behavior, quoting, line endings, and other CSV formatting options. For details, see the official CSV documentation: https://docs.python.org/3/library/csv.html#csv-fmt-params
 
-The `DataclassWriter` also takes a `**fmtparams` which accepts the same parameters as the `csv.writer`, for more
-information see: https://docs.python.org/3/library/csv.html#csv-fmt-params
-
-Now, there are situations where we don't want to write the CSV header. In this case, the method `write` of
-the `DataclassWriter` accepts an extra argument, called `skip_header`. The default value is `False` and when set to
-`True` it will skip the header.
+There are also cases where you may want to omit the CSV header. The write method provides a skip_header argument for this purpose. It defaults to `False`, but when set to `True`, the writer will skip generating the header row.
 
 #### Modifying the CSV header
 
-As previously mentioned the `DataclassWriter` uses the names of the properties defined in the dataclass as the CSV header titles, however,
-depending on your use case it makes sense to change it. The `DataclassWriter` has a `map` method just for this purpose.
+As mentioned earlier, `DataclassWriter` uses the dataclass field names as the default CSV header titles. Depending on your use case, you may want to customize these titles. For that, `DataclassWriter` provides the map method.
 
- Using the `User` dataclass with the properties `firstname`, `lastname` and `age`. The snippet below shows how to change `firstname` to `First name` and `lastname` to `Last name`:
+Using our `User` dataclass with the fields `firstname`, `lastname`, and `age`, the example below shows how to rename `firstname` to `First name` and `lastname` to `Last name`:
 
  ```python
  with open("users.csv", "w") as f:
