@@ -37,10 +37,6 @@ Eliminates the need for manual loops to convert types, validate data, or set def
 Alongside reading, the library provides `DataclassWriter` for generating CSV files from lists of dataclass instances.
 
 
-## Thanks
-
-A heartfelt thank you to all the incredible contributors who have supported this project over the years. Special thanks go to [@kraktus](https://github.com/kraktus) for setting up GitHub Actions, enhancing automation for package creation, and delivering numerous code improvements.
-
 
 ## Installation
 
@@ -205,8 +201,6 @@ reader = DataclassReader(users_csv, User)
 reader.map('First name').to('firstname')
 ```
 
-Now the DataclassReader will know how to extract the data from the column **First Name** and add it to the to dataclass property **firstname**
-
 Now, `DataclassReader` will correctly extract the data from the **First Name** column 
 and assign it to the **firstname** property in the dataclass.
 
@@ -254,9 +248,7 @@ User(name='Edit', email='edit@test.com', birthday=datetime.datetime(2018, 11, 23
 
 ### Fields metadata
 
-It’s important to note that the dateformat decorator defines the date format used to parse all datetime properties in a dataclass.
-
-However, CSV files may sometimes contain multiple date columns with different formats. In these cases, you can assign a format specific to each property by using dataclasses.field.
+It’s important to note that the `dateformat` decorator defines the date format used to parse all datetime properties in a dataclass. However, CSV files may sometimes contain multiple date columns with different formats. In these cases, you can assign a format specific to each property by using dataclasses.field.
 
 For example, consider the following CSV file:
 
@@ -375,7 +367,7 @@ from dataclass_csv import DataclassWriter
 Initialize it with the required arguments and call the method `write`:
 
 ```python
-with open("users.csv", "w") as f:
+with open("users.csv", "w+") as f:
     w = DataclassWriter(f, users, User)
     w.write()
 ```
@@ -423,6 +415,16 @@ John,Smith,40
 Daniel,Nilsson,10
 Ella,Fralla,4
 ```
+
+## Contributors
+
+A heartfelt thank you to all the incredible contributors who have supported this project over the years. Special thanks go to [@kraktus](https://github.com/kraktus) for setting up GitHub Actions, enhancing automation for package creation, and delivering numerous code improvements.
+
+<a href="https://github.com/dfurtado/dataclass-csv/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=dfurtado/dataclass-csv" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## Copyright and License
 
