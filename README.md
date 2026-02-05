@@ -1,4 +1,4 @@
-[![Unit testing](https://github.com/dfurtado/dataclass-csv/actions/workflows/unit-test.yml/badge.svg)](https://github.com/dfurtado/dataclass-csv/actions/workflows/unit-test.yml)
+[![Unit testing](https://github.com/dfurtado/dataclass-csv/actions/workflows/test.yml/badge.svg)](https://github.com/dfurtado/dataclass-csv/actions/workflows/test.yml)
 [![pypi](https://img.shields.io/pypi/v/dataclass-csv.svg)](https://pypi.python.org/pypi/dataclass-csv)
 [![Downloads](https://pepy.tech/badge/dataclass-csv)](https://pepy.tech/project/dataclass-csv)
 
