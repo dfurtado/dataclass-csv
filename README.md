@@ -2,7 +2,6 @@
 [![pypi](https://img.shields.io/pypi/v/dataclass-csv.svg)](https://pypi.python.org/pypi/dataclass-csv)
 [![Downloads](https://pepy.tech/badge/dataclass-csv)](https://pepy.tech/project/dataclass-csv)
 
-
 # Dataclass CSV
 
 Dataclass CSV makes working with CSV files simpler and more reliable than using dictionaries. It leverages Python’s dataclasses to represent each row in a CSV file, while also supporting type annotations for proper type checking and validation.
@@ -100,7 +99,7 @@ dataclass_csv.DataclassReader(
 )
 ```
 
-All keyword arguments supported by DictReader are also supported by DataclassReader, with one additional option:
+All keyword arguments supported by `DictReader` are also supported by `DataclassReader`, with one additional option:
 
 `validate_header` — When enabled, `DataclassReader` will raise a ValueError if the CSV file contains duplicate column names. This validation helps prevent data from being overwritten. To disable this check, set `validate_header=False` when creating a `DataclassReader` instance. For example:
 
@@ -128,7 +127,7 @@ For example, if we modify the CSV file from the **Getting Started** section and 
 ```text
 Astor, astor@test.com, test
 ```
-Remember that in the User dataclass, the `age` property is annotated as an `int`. If we run the code again, an exception will be raised with the following message:
+Remember that in the `User` dataclass, the `age` property is annotated as an `int`. If we run the code again, an exception will be raised with the following message:
 
 
 ```text
@@ -141,7 +140,7 @@ Note that, in addition to describing the error, `DataclassReader` also indicates
 
 ### Default values
 
-`DataclassReader` can process dataclass fields that define default values. As an example, we’ll modify the User dataclass to assign a default value to the `email` field:
+`DataclassReader` can process dataclass fields that define default values. As an example, we’ll modify the `User` dataclass to assign a default value to the `email` field:
 
 ```python
 from dataclasses import dataclass
@@ -166,7 +165,7 @@ User(firstname='Astor', email='Not specified', age=7)
 User(firstname='Edit', email='edit@test.com', age=3)
 User(firstname='Ella', email='ella@test.com', age=2)
 ```
-Note that the User object for Astor now has the default value `Not specified` assigned to the email property.
+Note that the `User` object for Astor now has the default value `Not specified` assigned to the email property.
 
 Default values can also be defined using `dataclasses.field`, as shown below:
 
@@ -335,7 +334,7 @@ class User:
 
 Reading CSV files with `DataclassReader` gives you the full benefit of Python’s type‑safety through dataclasses and type annotations. But sometimes we need to go in the opposite direction—using dataclasses to produce CSV output. That’s exactly where `DataclassWriter` shines.
 
-Using `DataclassWriter` is straightforward. Suppose we have a simple User dataclass:
+Using `DataclassWriter` is straightforward. Suppose we have a simple `User` dataclass:
 
 ```python
 from dataclasses import dataclass
@@ -374,7 +373,7 @@ with open("users.csv", "w+") as f:
 
 That’s it! Let’s break down what’s happening in the example above.
 
-We start by opening a file named user.csv in write mode. Then we create a `DataclassWriter` instance. To initialize a writer, we provide three things: the file object, the list of `User` instances, and the dataclass type itself (`User`).
+We start by opening a file named `user.csv in write mode. Then we create a `DataclassWriter` instance. To initialize a writer, we provide three things: the file object, the list of `User` instances, and the dataclass type itself (`User`).
 
 The type is required because the writer uses it to determine the CSV header. By default, it takes the field names defined in the dataclass. For our `User` example, the resulting column titles are `firstname`, `lastname`, and `age`.
 
@@ -388,7 +387,7 @@ Ella,Fralla,4
 ```
 `DataclassWriter` also accepts `**fmtparams`, which are passed directly to Python’s built‑in `csv.writer`. You can use this to customize delimiter behavior, quoting, line endings, and other CSV formatting options. For details, see the official CSV documentation: https://docs.python.org/3/library/csv.html#csv-fmt-params
 
-There are also cases where you may want to omit the CSV header. The write method provides a skip_header argument for this purpose. It defaults to `False`, but when set to `True`, the writer will skip generating the header row.
+There are also cases where you may want to omit the CSV header. The write method provides a `skip_header` argument for this purpose. It defaults to `False`, but when set to `True`, the writer will skip generating the header row.
 
 #### Modifying the CSV header
 
